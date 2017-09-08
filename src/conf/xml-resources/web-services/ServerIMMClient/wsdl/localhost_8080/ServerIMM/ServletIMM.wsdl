@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://servidorimm/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="ServletIMMService" targetNamespace="http://servidorimm/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://servidorimm/" elementFormDefault="unqualified" targetNamespace="http://servidorimm/" version="1.0">
+
+  <xs:element name="altaTicket" type="tns:altaTicket"/>
+
+  <xs:element name="altaTicketResponse" type="tns:altaTicketResponse"/>
+
+  <xs:complexType name="altaTicket">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:voTicket"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="voTicket">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="nombre" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="altaTicketResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="altaTicketResponse">
+    <wsdl:part element="tns:altaTicketResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="altaTicket">
+    <wsdl:part element="tns:altaTicket" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ServletIMM">
+    <wsdl:operation name="altaTicket">
+      <wsdl:input message="tns:altaTicket" name="altaTicket">
+    </wsdl:input>
+      <wsdl:output message="tns:altaTicketResponse" name="altaTicketResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServletIMMServiceSoapBinding" type="tns:ServletIMM">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="altaTicket">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="altaTicket">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="altaTicketResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ServletIMMService">
+    <wsdl:port binding="tns:ServletIMMServiceSoapBinding" name="ServletIMMPort">
+      <soap:address location="http://localhost:8080/ServerIMM/ServletIMM"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

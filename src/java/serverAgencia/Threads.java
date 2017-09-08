@@ -44,14 +44,14 @@ public class Threads extends Thread {
         }while(!"quit".equals(dat)); */
         do{
             dat = this.serv.iniciarComunicacion(this.socket);
-            System.out.println("Datos recibidos: "+dat.toUpperCase());
+            System.out.println("Datos recibidos: "+dat);
             /*VoTicketCompleto voTC = new VoTicketCompleto();
             voTC.setMatricula(dat);
             ServletIMMService s = new ServletIMMService();
             ServletIMM server = s.getServletIMMPort();
             String resultado="";
             System.out.println("Respuesta Servidor IMM: "+resultado);*/
-        }while(!"QUIT".equals(dat)); 
+        }while(!"quit".equals(dat)); 
         
     }
 }

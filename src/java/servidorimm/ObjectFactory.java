@@ -24,6 +24,8 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+    private final static QName _AltaTicketCompletoResponse_QNAME = new QName("http://servidorimm/", "altaTicketCompletoResponse");
+    private final static QName _AltaTicketCompleto_QNAME = new QName("http://servidorimm/", "altaTicketCompleto");
     private final static QName _AltaTicketResponse_QNAME = new QName("http://servidorimm/", "altaTicketResponse");
     private final static QName _AltaTicket_QNAME = new QName("http://servidorimm/", "altaTicket");
 
@@ -43,6 +45,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AltaTicketCompleto }
+     * 
+     */
+    public AltaTicketCompleto createAltaTicketCompleto() {
+        return new AltaTicketCompleto();
+    }
+
+    /**
      * Create an instance of {@link AltaTicketResponse }
      * 
      */
@@ -51,11 +61,61 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AltaTicketCompletoResponse }
+     * 
+     */
+    public AltaTicketCompletoResponse createAltaTicketCompletoResponse() {
+        return new AltaTicketCompletoResponse();
+    }
+
+    /**
+     * Create an instance of {@link VoTicketCompleto }
+     * 
+     */
+    public VoTicketCompleto createVoTicketCompleto() {
+        return new VoTicketCompleto();
+    }
+
+    /**
+     * Create an instance of {@link Date }
+     * 
+     */
+    public Date createDate() {
+        return new Date();
+    }
+
+    /**
      * Create an instance of {@link VoTicket }
      * 
      */
     public VoTicket createVoTicket() {
         return new VoTicket();
+    }
+
+    /**
+     * Create an instance of {@link VoTicketBasico }
+     * 
+     */
+    public VoTicketBasico createVoTicketBasico() {
+        return new VoTicketBasico();
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link AltaTicketCompletoResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://servidorimm/", name = "altaTicketCompletoResponse")
+    public JAXBElement<AltaTicketCompletoResponse> createAltaTicketCompletoResponse(AltaTicketCompletoResponse value) {
+        return new JAXBElement<AltaTicketCompletoResponse>(_AltaTicketCompletoResponse_QNAME, AltaTicketCompletoResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link AltaTicketCompleto }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://servidorimm/", name = "altaTicketCompleto")
+    public JAXBElement<AltaTicketCompleto> createAltaTicketCompleto(AltaTicketCompleto value) {
+        return new JAXBElement<AltaTicketCompleto>(_AltaTicketCompleto_QNAME, AltaTicketCompleto.class, null, value);
     }
 
     /**

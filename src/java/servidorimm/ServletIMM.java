@@ -27,6 +27,20 @@ public interface ServletIMM {
      * 
      * @param arg0
      * @return
+     *     returns servidorimm.VoTicketBasico
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "altaTicketCompleto", targetNamespace = "http://servidorimm/", className = "servidorimm.AltaTicketCompleto")
+    @ResponseWrapper(localName = "altaTicketCompletoResponse", targetNamespace = "http://servidorimm/", className = "servidorimm.AltaTicketCompletoResponse")
+    public VoTicketBasico altaTicketCompleto(
+        @WebParam(name = "arg0", targetNamespace = "")
+        VoTicketCompleto arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
      *     returns java.lang.String
      */
     @WebMethod

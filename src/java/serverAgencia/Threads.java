@@ -10,6 +10,7 @@ import java.net.Socket;
 import servidorimm.ServletIMM;
 import servidorimm.ServletIMMService;
 import servidorimm.VoTicket;
+import servidorimm.VoTicketCompleto;
 
 /**
  *
@@ -31,7 +32,7 @@ public class Threads extends Thread {
     public void run(){
         System.out.println("Comunicacion establecida . . . ");
         String dat;
-        //do{
+        /*do{
             dat = this.serv.iniciarComunicacion(this.socket);
             System.out.println("Datos recibidos: "+dat.toUpperCase());
             VoTicket vo= new VoTicket();
@@ -40,6 +41,17 @@ public class Threads extends Thread {
             ServletIMM server = s.getServletIMMPort();
             String resultado=server.altaTicket(vo);
             System.out.println("Respuesta Servidor IMM: "+resultado);
-        //}while(!"quit".equals(dat)); 
+        }while(!"quit".equals(dat)); */
+        do{
+            dat = this.serv.iniciarComunicacion(this.socket);
+            System.out.println("Datos recibidos: "+dat.toUpperCase());
+            /*VoTicketCompleto voTC = new VoTicketCompleto();
+            voTC.setMatricula(dat);
+            ServletIMMService s = new ServletIMMService();
+            ServletIMM server = s.getServletIMMPort();
+            String resultado="";
+            System.out.println("Respuesta Servidor IMM: "+resultado);*/
+        }while(!"quit".equals(dat)); 
+        
     }
 }

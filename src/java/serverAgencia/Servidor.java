@@ -23,16 +23,14 @@ public class Servidor {
     
     public String iniciarComunicacion(Socket socketRecepcion){
         BufferedReader lectura;
-        String s = "BASURA";
+        String s = "";
         try {
             lectura=new BufferedReader( new
             InputStreamReader(socketRecepcion.getInputStream()));
-            System.out.println("DESPUES DE LECTURA");
             s = lectura.readLine();
             System.out.println("Conectado con:"+socketRecepcion.getPort());
         } catch (IOException ex) {
             System.out.println("MENSAJE ERROR EN INICIAR COMUNICACION: "+ex.getMessage());
-            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
         return s;
     }

@@ -51,7 +51,7 @@ public class Threads extends Thread {
             ServletIMM server = s.getServletIMMPort();
             String resultado="";
             System.out.println("Respuesta Servidor IMM: "+resultado);*/
-        }while(!"quit".equals(dat)); 
+        }while(!"QUIT".equals(dat)); 
         
     }
 }

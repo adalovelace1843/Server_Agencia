@@ -7,6 +7,9 @@ package serverAgencia;
 
 
 import java.net.Socket;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import servidorimm.ServletIMM;
 import servidorimm.ServletIMMService;
 import servidorimm.VoTicket;
@@ -32,7 +35,7 @@ public class Threads extends Thread {
     public void run(){
         System.out.println("Comunicacion establecida . . . ");
         String dat;
-        /*do{
+        //do{
             dat = this.serv.iniciarComunicacion(this.socket);
             System.out.println("Datos recibidos: "+dat.toUpperCase());
             VoTicket vo= new VoTicket();
@@ -41,8 +44,20 @@ public class Threads extends Thread {
             ServletIMM server = s.getServletIMMPort();
             String resultado=server.altaTicket(vo);
             System.out.println("Respuesta Servidor IMM: "+resultado);
-        }while(!"quit".equals(dat)); */
-        do{
+            
+           
+        try {
+            InterfaceAgencia ia = new InterfaceAgenciaImpl();
+            valueObjects.VoTicket vo2= new valueObjects.VoTicket();
+            vo2.setNombre(dat);
+            resultado=ia.ventaTicketAg(vo2);
+            System.out.println("Respuesta Servidor Agencia: "+resultado);
+        } catch (SQLException ex) {
+            Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+        //}while(!"quit".equals(dat)); 
+        /*do{
             dat = this.serv.iniciarComunicacion(this.socket);
             System.out.println("Datos recibidos: "+dat);
             /*VoTicketCompleto voTC = new VoTicketCompleto();
@@ -51,7 +66,7 @@ public class Threads extends Thread {
             ServletIMM server = s.getServletIMMPort();
             String resultado="";
             System.out.println("Respuesta Servidor IMM: "+resultado);*/
-        }while(!"quit".equals(dat)); 
+        //}while(!"quit".equals(dat)); 
         
     }
 }

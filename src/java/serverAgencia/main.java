@@ -29,7 +29,7 @@ public class main {
                   Socket socketRecepcion = socket.accept();
                   Threads t = new Threads();
                   t.iniciar(socketRecepcion,s);
-                  t.start();
+                  t.run();
               }
           } catch (IOException ex) {
               Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);

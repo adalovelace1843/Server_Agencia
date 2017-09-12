@@ -8,11 +8,13 @@ package serverAgencia;
 
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidorimm.ServletIMM;
 import servidorimm.ServletIMMService;
 import servidorimm.VoTicket;
+import servidorimm.VoTicketBasico;
 import servidorimm.VoTicketCompleto;
 
 /**
@@ -36,7 +38,7 @@ public class Threads extends Thread {
         System.out.println("Comunicacion establecida . . . ");
         String dat;
         //do{
-            dat = this.serv.iniciarComunicacion(this.socket);
+       /*    dat = this.serv.iniciarComunicacion(this.socket);
             System.out.println("Datos recibidos: "+dat.toUpperCase());
             VoTicket vo= new VoTicket();
             vo.setNombre(dat);
@@ -54,19 +56,44 @@ public class Threads extends Thread {
             System.out.println("Respuesta Servidor Agencia: "+resultado);
         } catch (SQLException ex) {
             Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
             
         //}while(!"quit".equals(dat)); 
-        /*do{
+        int i=0;
+        
+        VoTicketCompleto voTC = new VoTicketCompleto();
+        String terminal="";
+        while(i<6){
             dat = this.serv.iniciarComunicacion(this.socket);
             System.out.println("Datos recibidos: "+dat);
-            /*VoTicketCompleto voTC = new VoTicketCompleto();
-            voTC.setMatricula(dat);
-            ServletIMMService s = new ServletIMMService();
-            ServletIMM server = s.getServletIMMPort();
-            String resultado="";
-            System.out.println("Respuesta Servidor IMM: "+resultado);*/
-        //}while(!"quit".equals(dat)); 
+            switch(i){
+                case 0: 
+                    voTC.setMatricula(dat);
+                    break;
+                case 1: 
+                    voTC.setAgenciaVenta(dat);
+                    break;
+                case 2: 
+                    voTC.setFHVenta(null);
+                    break;
+                case 3: 
+                    voTC.setFHInicio(null);
+                    break;
+                case 4: 
+                    voTC.setCantMin(Integer.parseInt(dat));
+                    break;
+                case 5: 
+                    terminal=dat;
+                    break;
+                }
+            i++;
+        }
+
+        ServletIMMService s = new ServletIMMService();
+        ServletIMM server = s.getServletIMMPort();
+        VoTicketBasico voTB=server.altaTicketCompleto(voTC);
+        System.out.println("Respuesta Servidor IMM, nro ticket: "+voTB.getNroTicket()+" importe:"+voTB.getImporteTotal());
+         
         
     }
 }

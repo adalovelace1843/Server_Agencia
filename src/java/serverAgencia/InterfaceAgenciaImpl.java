@@ -26,6 +26,8 @@ public class InterfaceAgenciaImpl implements InterfaceAgencia {
             respuesta = "Venta guardada en Servidor Agencia";
         } catch (NamingException ex) {
             Logger.getLogger(InterfaceAgenciaImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(InterfaceAgenciaImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return respuesta;
     }

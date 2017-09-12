@@ -6,6 +6,7 @@
 package serverAgencia;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import servidorimm.VoTicketCompleto;
 import valueObjects.VoTicket;
+import valueObjects.VoTicketAgencia;
 
 /**
  *
@@ -59,36 +61,17 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
      * @return devuelve el numero de ticket o -1 si hubo algún error
      */
     @Override
-    public int guardarTicketCompletoAg(VoTicketCompleto vo) throws SQLException {
-        /*String sql="SELECT numero+1 from secuencia where tipo = 'ticket'";
-        PreparedStatement inst;
-        inst = conn.prepareStatement(sql);
-        ResultSet rs = inst.executeQuery(sql);
-        int numero = -1;
-        if(rs.next()){
-            numero = rs.getInt("numero");
-            sql="INSERT INTO ventascompleto (numero,agencia,matricula,fecha_hora_venta,fecha_hora_inicio,hora_inicio,minutos,importe_Total) values (?,?,?,?,?,?,?)";
-            PreparedStatement inst2 = conn.prepareStatement(sql);
-            inst2.setInt(1, numero);
-            inst2.setString(2, vo.getAgencia_venta());
-            inst2.setString(3, vo.getMatricula());
-            inst2.setDate(4, vo.getF_h_venta());
-            inst2.setDate(5, vo.getF_h_inicio());
-            inst2.setInt(6, vo.getCant_min());
-            inst2.setFloat(7, vo.getImporte_total());
-            if(inst2.executeUpdate(sql) == 1){
-                sql="UPDATE FROM secuencia SET numero=numero+1 where tipo = 'ticket'";
-                PreparedStatement inst3 = conn.prepareStatement(sql);
-                if(inst3.executeUpdate(sql) != 1){
-                    numero=-1;
-                }
-                inst3.close();
-            }
-            inst2.close();
-        }
-        rs.close();
-        inst.close();    
-        return numero;   */
-        return 0;
+    public void guardarTicketCompletoAg(VoTicketAgencia vo) throws SQLException {
+        String sql="INSERT INTO ventascompleto (numero,matricula,fecha_hora_venta,importe_Total, terminal_venta) values (?,?,?,?,?)";
+        PreparedStatement inst2 = conn.prepareStatement(sql);
+        inst2.setInt(1, vo.getNro_ticket());
+        inst2.setString(2, vo.getMatricula());
+        inst2.setDate(3, (Date) vo.getFecha_hora_venta());
+        inst2.setFloat(4, vo.getImporte_total());
+        inst2.setString(5, vo.getTerminal_venta());
+        inst2.executeUpdate();
+
+        inst2.close();    
+
     }
 }

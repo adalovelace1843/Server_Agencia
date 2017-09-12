@@ -7,6 +7,7 @@ package serverAgencia;
 
 import java.sql.SQLException;
 import valueObjects.VoTicket;
+import valueObjects.VoTicketAgencia;
 
 /**
  *
@@ -14,4 +15,5 @@ import valueObjects.VoTicket;
  */
 public interface InterfaceAgencia {
     public String ventaTicketAg(VoTicket vo) throws SQLException;
+    public String ventaTicketCompletoAg(VoTicketAgencia vo) throws SQLException;
 }

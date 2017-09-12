@@ -16,6 +16,7 @@ import servidorimm.ServletIMMService;
 import servidorimm.VoTicket;
 import servidorimm.VoTicketBasico;
 import servidorimm.VoTicketCompleto;
+import valueObjects.VoTicketAgencia;
 
 /**
  *
@@ -35,8 +36,6 @@ public class Threads extends Thread {
     
     @Override
     public void run(){
-        System.out.println("Comunicacion establecida . . . ");
-        String dat;
         //do{
        /*    dat = this.serv.iniciarComunicacion(this.socket);
             System.out.println("Datos recibidos: "+dat.toUpperCase());
@@ -59,6 +58,9 @@ public class Threads extends Thread {
         }*/
             
         //}while(!"quit".equals(dat)); 
+        
+        System.out.println("Comunicacion establecida . . . ");
+        String dat;
         int i=0;
         
         VoTicketCompleto voTC = new VoTicketCompleto();
@@ -93,7 +95,22 @@ public class Threads extends Thread {
         ServletIMM server = s.getServletIMMPort();
         VoTicketBasico voTB=server.altaTicketCompleto(voTC);
         System.out.println("Respuesta Servidor IMM, nro ticket: "+voTB.getNroTicket()+" importe:"+voTB.getImporteTotal());
-         
+        VoTicketAgencia voTA = new VoTicketAgencia();
+        voTA.setNro_ticket(voTB.getNroTicket());
+        voTA.setImporte_total(voTB.getImporteTotal());
+        voTA.setMatricula(voTC.getMatricula());
+        voTA.setTerminal_venta(terminal);
+        voTA.setFecha_hora_venta(null);
+
+        try {
+            InterfaceAgencia ia = new InterfaceAgenciaImpl();
+            String resp=ia.ventaTicketCompletoAg(voTA);
+            System.out.println("Respuesta Servidor Agencia: "+resp);
+        } catch (SQLException ex) {
+            Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         
     }
+    
 }

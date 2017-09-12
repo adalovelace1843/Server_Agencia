@@ -32,4 +32,19 @@ public class InterfaceAgenciaImpl implements InterfaceAgencia {
         return respuesta;
     }
     
+    @Override
+    public String ventaTicketCompletoAg(valueObjects.VoTicketAgencia vo) throws SQLException {
+        String respuesta = "ERROR EN GUARDAR TICKET EN SERVDOR AGENCIA";
+        try {
+            InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
+            in.guardarTicketCompletoAg(vo);
+            respuesta = "Venta guardada en Servidor Agencia";
+        } catch (NamingException ex) {
+            Logger.getLogger(InterfaceAgenciaImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(InterfaceAgenciaImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return respuesta;
+    }
+    
 }

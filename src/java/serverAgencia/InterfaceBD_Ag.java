@@ -8,6 +8,7 @@ package serverAgencia;
 import java.sql.SQLException;
 import servidorimm.VoTicketCompleto;
 import valueObjects.VoTicket;
+import valueObjects.VoTicketAgencia;
 
 /**
  *
@@ -15,5 +16,5 @@ import valueObjects.VoTicket;
  */
 public interface InterfaceBD_Ag {
     public void guardarTicketAg(VoTicket vo) throws SQLException;
-    public int guardarTicketCompletoAg (VoTicketCompleto vo) throws SQLException;
+    public void guardarTicketCompletoAg (VoTicketAgencia vo) throws SQLException;
 }

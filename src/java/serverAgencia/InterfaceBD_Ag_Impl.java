@@ -6,6 +6,7 @@
 package serverAgencia;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +25,7 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
     private static InterfaceBD_Ag_Impl instancia;
     
     
-    public static InterfaceBD_Ag_Impl getInstance() throws NamingException, SQLException{
+    public static InterfaceBD_Ag_Impl getInstance() throws NamingException, SQLException, ClassNotFoundException{
         if(instancia == null){
             instancia = new InterfaceBD_Ag_Impl();
             instancia.conectarBD();
@@ -32,10 +33,10 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
         return instancia;
     }
     
-    private void conectarBD() throws NamingException, SQLException{
-        InitialContext initContext2 = new InitialContext();
-        DataSource ds2 = (DataSource)initContext2.lookup("java:jboss/datasources/MySqlDS2");
-        conn = ds2.getConnection();
+    private void conectarBD() throws NamingException, SQLException, ClassNotFoundException{
+        Class.forName("com.mysql.jdbc.Driver");
+        conn = DriverManager.getConnection("jdbc:mysql://10.36.6.110/bd_agencia?user=root&password=root");
+
     }
     
 

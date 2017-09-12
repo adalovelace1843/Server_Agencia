@@ -28,7 +28,7 @@ public class main {
               while(true){
                   Socket socketRecepcion = socket.accept();
                   Threads t = new Threads();
-                  t.iniciar(socketRecepcion,s);
+                  t.iniciar(socketRecepcion,s, socket);
                   t.run();
               }
           } catch (IOException ex) {

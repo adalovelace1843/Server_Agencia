@@ -26,6 +26,7 @@ public class main {
               System.out.println("Esperando comunicacion . . . ");
               
               while(true){
+                  
                   Socket socketRecepcion = socket.accept();
                   Threads t = new Threads();
                   t.iniciar(socketRecepcion,s, socket);

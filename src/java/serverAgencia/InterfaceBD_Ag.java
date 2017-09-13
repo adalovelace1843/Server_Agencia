@@ -17,4 +17,6 @@ import valueObjects.VoTicketAgencia;
 public interface InterfaceBD_Ag {
     public void guardarTicketAg(VoTicket vo) throws SQLException;
     public void guardarTicketCompletoAg (VoTicketAgencia vo) throws SQLException;
+
+    public boolean obtenerValidacionBD(String usuario, String clave) throws SQLException;
 }

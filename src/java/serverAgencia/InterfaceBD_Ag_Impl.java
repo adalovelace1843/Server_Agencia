@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.naming.NamingException;
 import valueObjects.VoTicket;
@@ -69,5 +70,21 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
 
         inst2.close();    
 
+    }
+
+    @Override
+    public boolean obtenerValidacionBD(String usuario, String clave) throws SQLException {
+        boolean resultado=false;
+        String sql="select * from usuarios where usuario=? and clave=?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, usuario);
+        ps.setString(2, clave);
+        ResultSet rs =ps.executeQuery();
+        if(rs.next()){
+            resultado=true;
+        }
+        rs.close();
+        ps.close();
+        return resultado;
     }
 }

@@ -18,33 +18,30 @@ import valueObjects.VoTicket;
 public class InterfaceAgenciaImpl implements InterfaceAgencia {
 
     @Override
-    public String ventaTicketAg(valueObjects.VoTicket vo) throws SQLException {
+    public String ventaTicketAg(valueObjects.VoTicket vo) throws NamingException,SQLException,ClassNotFoundException{
         String respuesta = "ERROR EN GUARDAR TICKET EN SERVDOR AGENCIA";
-        try {
-            InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
-            in.guardarTicketAg(vo);
-            respuesta = "Venta guardada en Servidor Agencia";
-        } catch (NamingException ex) {
-            Logger.getLogger(InterfaceAgenciaImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(InterfaceAgenciaImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
+        in.guardarTicketAg(vo);
+        respuesta = "Venta guardada en Servidor Agencia";
+
         return respuesta;
     }
     
     @Override
-    public String ventaTicketCompletoAg(valueObjects.VoTicketAgencia vo) throws SQLException {
+    public String ventaTicketCompletoAg(valueObjects.VoTicketAgencia vo) throws NamingException,SQLException,ClassNotFoundException {
         String respuesta = "ERROR EN GUARDAR TICKET EN SERVDOR AGENCIA";
-        try {
-            InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
-            in.guardarTicketCompletoAg(vo);
-            respuesta = "Venta guardada en Servidor Agencia";
-        } catch (NamingException ex) {
-            Logger.getLogger(InterfaceAgenciaImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(InterfaceAgenciaImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
+      
+        InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
+        in.guardarTicketCompletoAg(vo);
+        respuesta = "Venta guardada en Servidor Agencia";
+
         return respuesta;
+    }
+
+    @Override
+    public boolean obtenerValidacion(String usuario, String clave) throws NamingException,SQLException,ClassNotFoundException{
+        InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
+        return in.obtenerValidacionBD(usuario,clave);
     }
     
 }

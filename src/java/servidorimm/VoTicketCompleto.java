@@ -4,9 +4,7 @@ package servidorimm;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
@@ -21,8 +19,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *       &lt;sequence>
  *         &lt;element name="agencia_venta" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="cant_min" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="f_h_inicio" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;element name="f_h_venta" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
+ *         &lt;element name="f_h_inicio" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="f_h_venta" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="matricula" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
@@ -49,11 +47,9 @@ public class VoTicketCompleto
     @XmlElement(name = "cant_min")
     protected int cantMin;
     @XmlElement(name = "f_h_inicio")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar fhInicio;
+    protected String fhInicio;
     @XmlElement(name = "f_h_venta")
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar fhVenta;
+    protected String fhVenta;
     protected String matricula;
 
     /**
@@ -101,10 +97,10 @@ public class VoTicketCompleto
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getFHInicio() {
+    public String getFHInicio() {
         return fhInicio;
     }
 
@@ -113,10 +109,10 @@ public class VoTicketCompleto
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setFHInicio(XMLGregorianCalendar value) {
+    public void setFHInicio(String value) {
         this.fhInicio = value;
     }
 
@@ -125,10 +121,10 @@ public class VoTicketCompleto
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getFHVenta() {
+    public String getFHVenta() {
         return fhVenta;
     }
 
@@ -137,10 +133,10 @@ public class VoTicketCompleto
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setFHVenta(XMLGregorianCalendar value) {
+    public void setFHVenta(String value) {
         this.fhVenta = value;
     }
 

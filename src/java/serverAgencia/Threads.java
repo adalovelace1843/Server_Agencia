@@ -6,19 +6,16 @@
 package serverAgencia;
 
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidorimm.ServletIMM;
 import servidorimm.ServletIMMService;
-import servidorimm.VoTicket;
 import servidorimm.VoTicketBasico;
 import servidorimm.VoTicketCompleto;
 import valueObjects.VoTicketAgencia;
@@ -82,10 +79,10 @@ public class Threads extends Thread {
                     voTC.setAgenciaVenta(dat);
                     break;
                 case 2: 
-                    voTC.setFHVenta(null);
+                    voTC.setFHVenta(dat);
                     break;
                 case 3: 
-                    voTC.setFHInicio(null);
+                    voTC.setFHInicio(dat);
                     break;
                 case 4: 
                     voTC.setCantMin(Integer.parseInt(dat));
@@ -107,7 +104,7 @@ public class Threads extends Thread {
         voTA.setImporte_total(voTB.getImporteTotal());
         voTA.setMatricula(voTC.getMatricula());
         voTA.setTerminal_venta(terminal);
-        voTA.setFecha_hora_venta(null);
+        voTA.setFecha_hora_venta(voTC.getFHVenta());
 
         /* SE GUARDA EL TICKET EN EL SERVIDOR DE AGENCIA */
         try {
@@ -117,8 +114,8 @@ public class Threads extends Thread {
         } catch (SQLException ex) {
             Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         /* ENVIO LOS DATOS HACIA LA TERMINAL DE LA AGENCIA */
-      
         try {
             PrintWriter escritura;
             String linea;

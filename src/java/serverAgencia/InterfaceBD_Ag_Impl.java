@@ -9,12 +9,8 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.sql.DataSource;
-import servidorimm.VoTicketCompleto;
 import valueObjects.VoTicket;
 import valueObjects.VoTicketAgencia;
 
@@ -66,7 +62,7 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
         PreparedStatement inst2 = conn.prepareStatement(sql);
         inst2.setInt(1, vo.getNro_ticket());
         inst2.setString(2, vo.getMatricula());
-        inst2.setDate(3, (Date) vo.getFecha_hora_venta());
+        inst2.setString(3, vo.getFecha_hora_venta());
         inst2.setFloat(4, vo.getImporte_total());
         inst2.setString(5, vo.getTerminal_venta());
         inst2.executeUpdate();

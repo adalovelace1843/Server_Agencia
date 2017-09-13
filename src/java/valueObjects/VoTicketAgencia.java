@@ -6,7 +6,7 @@
 package valueObjects;
 
 import java.io.Serializable;
-import java.util.Date;
+
 
 
 /**
@@ -15,7 +15,7 @@ import java.util.Date;
  */
 public class VoTicketAgencia extends VoTicketBasico implements Serializable {
     private String matricula;
-    private Date fecha_hora_venta;
+    private String fecha_hora_venta;
     private String terminal_venta;
 
     public VoTicketAgencia() {
@@ -29,11 +29,11 @@ public class VoTicketAgencia extends VoTicketBasico implements Serializable {
         this.matricula = matricula;
     }
 
-    public Date getFecha_hora_venta() {
+    public String getFecha_hora_venta() {
         return fecha_hora_venta;
     }
 
-    public void setFecha_hora_venta(Date fecha_hora_venta) {
+    public void setFecha_hora_venta(String fecha_hora_venta) {
         this.fecha_hora_venta = fecha_hora_venta;
     }
 

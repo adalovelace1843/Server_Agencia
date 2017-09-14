@@ -44,40 +44,45 @@ public class Threads extends Thread {
     @Override
     public void run(){
         
+        
+        /* ESTA SECCION SE ENCARGA DE VALIDAR LAS PETICIONES DE AUTENTICACION
+        DESDE LAS DIFERENTES TERMINALES */
         String linea="ERROR";
         while(linea.equals("ERROR")){
+            PrintWriter escritura = null; 
             try {
-                PrintWriter escritura;
-
                 escritura=new PrintWriter(this.socket.getOutputStream(),true);
                 if(validarLogin()){
                     linea="OK";
-                }
-                 escritura.println(linea);
+                }    
             } catch (NamingException ex) {
-                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+                linea="error_interno_sa";
             } catch (SQLException ex) {
-                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+                linea="error_bd";
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+                linea="error_interno_sa";
             } catch (IOException ex) {
-                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+                linea="error_interno_sa";
             }
+            escritura.println(linea);
         }
+        /* FIN */
         
+        /* UNA VEZ AUTENTICADA LA TERMINAL INICIAMOS EL PROCESO DE INTERCAMBIO DE DATOS SEGUN OPCION */
         
         System.out.println("Comunicacion establecida . . . ");
         String dat;
-
         
+        /* RECIBO LA PRIMER COMUNICACION QUE ME INDICA SI INICIO LA ESCUCHA DE DATOS 
+        O FINALIZO LA COMUNICACION*/
         dat = this.serv.iniciarComunicacion(this.socket);
         while(!dat.equals("0")){
             
             int i=0;
-            /* RECIBO LOS DATOS DEL TICKET DESDE UNA TERMINAL DE AGENCIA */
             VoTicketCompleto voTC = new VoTicketCompleto();
             String terminal="";
             
+            /* RECIBO LOS DATOS DEL TICKET DESDE UNA TERMINAL DE AGENCIA */
             while(i<6){
                 dat = this.serv.iniciarComunicacion(this.socket);
                 System.out.println("Datos recibidos: "+dat);
@@ -104,11 +109,19 @@ public class Threads extends Thread {
                 i++;
             }
 
+            /* GENERO LAS CLASES QUE ME ASISTEN CON EL WS DE IMM*/
             ServletIMMService s = new ServletIMMService();
             ServletIMM server = s.getServletIMMPort();
             /* SE ENVIA EL TICKET HACIA LA IMM PARA SU TRATAMIENTO */
             VoTicketBasico voTB=server.altaTicketCompleto(voTC);
             System.out.println("Respuesta Servidor IMM, nro ticket: "+voTB.getNroTicket()+" importe:"+voTB.getImporteTotal());
+            
+            /* SI HUBO ALGUN ERROR EN LA IMM SE DEVUELVE NRO TICKET -1 */
+            if(voTB.getNroTicket() == -1){
+                System.out.println("HUBO ERROR EN RESPUESTA IMM ESTA PARTE NO ESTA IMPLEMENTADA AUN");
+            }
+            
+            /* GENERO EL VO TICKET AGENCIA PARA PODER ENVIARLO A PERSISTIR EN BD DE AGENCIA*/
             VoTicketAgencia voTA = new VoTicketAgencia();
             voTA.setNro_ticket(voTB.getNroTicket());
             voTA.setImporte_total(voTB.getImporteTotal());
@@ -117,28 +130,32 @@ public class Threads extends Thread {
             voTA.setFecha_hora_venta(voTC.getFHVenta());
 
             /* SE GUARDA EL TICKET EN EL SERVIDOR DE AGENCIA */
+            String resp;
             try {
-                String resp=ia.ventaTicketCompletoAg(voTA);
+                resp=ia.ventaTicketCompletoAg(voTA);
                 System.out.println("Respuesta Servidor Agencia: "+resp);
             } catch (SQLException ex) {
-                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+                resp="error_bd";
             } catch (NamingException ex) {
-                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+                resp="error_interno_sa";
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+                resp="error_interno_sa";
             }
 
             /* ENVIO LOS DATOS HACIA LA TERMINAL DE LA AGENCIA */
             try {
                 PrintWriter escritura;
-                System.out.println("Iniciando envio de datos . . . ");
+                System.out.println("Iniciando envio de datos hacia terminal . . . ");
                 escritura=new PrintWriter(this.socket.getOutputStream(),true);
-                linea="Ticket:"+voTA.getNro_ticket()+" Importe:"+voTA.getImporte_total();
-                escritura.println(linea);
-
-                
+                /* VALIDO QUE NO HAYAN HABIDO ERRORES AL PERSISTIR TICKET EN SA */
+                if("error_bd".equals(resp) || "error_interno_sa".equals(resp)){
+                    linea=resp;
+                }else{
+                    linea="Ticket:"+voTA.getNro_ticket()+" Importe:"+voTA.getImporte_total();
+                }
+                escritura.println(linea);        
             } catch (IOException ex) {
-                Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("ERROR DE IO: "+ex.getMessage());
             }
 
             System.out.println("Esperando comunicacion . . . ");
@@ -146,12 +163,11 @@ public class Threads extends Thread {
             dat = this.serv.iniciarComunicacion(this.socket);
         }   
         
-        
         try {
             System.out.println("Sesion desconectada . . ." + this.socket.getPort());
             this.socket.close();
         } catch (IOException ex) {
-            Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("ERROR DE IO: "+ex.getMessage());
         }
         
     }

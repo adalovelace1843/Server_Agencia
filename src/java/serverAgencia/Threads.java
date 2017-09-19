@@ -139,16 +139,16 @@ public class Threads extends Thread {
 
                     /* ENVIO LOS DATOS HACIA LA TERMINAL DE LA AGENCIA */
                     try {
-                        PrintWriter escritura;
+                        
                         System.out.println("Iniciando envio de datos hacia terminal . . . ");
-                        escritura=new PrintWriter(this.socket.getOutputStream(),true);
+                        ObjectOutputStream escritura = new ObjectOutputStream(socket.getOutputStream());
                         /* VALIDO QUE NO HAYAN HABIDO ERRORES AL PERSISTIR TICKET EN SA */
                         if("error_bd".equals(resp) || "error_interno_sa".equals(resp)){
                             linea=resp;
                         }else{
                             linea="Ticket:"+voTA.getNro_ticket()+" Importe:"+voTA.getImporte_total();
                         }
-                        escritura.println(linea);        
+                        escritura.writeObject(linea);        
                     } catch (IOException ex) {
                         System.out.println("ERROR DE IO: "+ex.getMessage());
                     }

@@ -8,10 +8,10 @@ package serverAgencia;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import servidorimm.VoTicketCompleto;
+import valueObjects.VoTicketTerminal;
+
 
 /**
  *
@@ -22,18 +22,15 @@ public class Servidor {
     public Servidor() {
     }
     
-    public String iniciarComunicacion(Socket socketRecepcion){
-        BufferedReader lectura;
-        String s = "";
-        try {
-            lectura=new BufferedReader( new
-            InputStreamReader(socketRecepcion.getInputStream()));
-            s = lectura.readLine();
-            System.out.println("Conectado con:"+socketRecepcion.getPort());
-        } catch (IOException ex) {
-            System.out.println("MENSAJE ERROR EN INICIAR COMUNICACION: "+ex.getMessage());
-        }
+    public Object iniciarComunicacion(Socket socketRecepcion) throws ClassNotFoundException,IOException{
+
+        Object s;
+        ObjectInputStream lectura = new ObjectInputStream(socketRecepcion.getInputStream());
+        s = lectura.readObject();
+        System.out.println("Conectado con:"+socketRecepcion.getPort());
         return s;
     }
+    
+
    
 }

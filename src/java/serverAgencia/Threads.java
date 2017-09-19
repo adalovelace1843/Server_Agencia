@@ -8,6 +8,7 @@ package serverAgencia;
 
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,6 +21,7 @@ import servidorimm.ServletIMMService;
 import servidorimm.VoTicketBasico;
 import servidorimm.VoTicketCompleto;
 import valueObjects.VoTicketAgencia;
+import valueObjects.VoTicketTerminal;
 
 /**
  *
@@ -49,12 +51,13 @@ public class Threads extends Thread {
         DESDE LAS DIFERENTES TERMINALES */
         String linea="ERROR";
         while(linea.equals("ERROR")){
-            PrintWriter escritura = null; 
+            ObjectOutputStream escritura = null;
             try {
-                escritura=new PrintWriter(this.socket.getOutputStream(),true);
+                escritura = new ObjectOutputStream(socket.getOutputStream());
                 if(validarLogin()){
                     linea="OK";
-                }    
+                }
+                
             } catch (NamingException ex) {
                 linea="error_interno_sa";
             } catch (SQLException ex) {
@@ -64,103 +67,113 @@ public class Threads extends Thread {
             } catch (IOException ex) {
                 linea="error_interno_sa";
             }
-            escritura.println(linea);
+            try {
+                escritura.writeObject(linea);
+                System.out.println(linea);
+            } catch (IOException ex) {
+                System.out.println("Error al envio de datos: "+ex.getMessage());
+            }
         }
         /* FIN */
         
         /* UNA VEZ AUTENTICADA LA TERMINAL INICIAMOS EL PROCESO DE INTERCAMBIO DE DATOS SEGUN OPCION */
         
         System.out.println("Comunicacion establecida . . . ");
-        String dat;
+        String dat = "0";
         
-        /* RECIBO LA PRIMER COMUNICACION QUE ME INDICA SI INICIO LA ESCUCHA DE DATOS 
-        O FINALIZO LA COMUNICACION*/
-        dat = this.serv.iniciarComunicacion(this.socket);
+        try {
+            /* RECIBO LA PRIMER COMUNICACION QUE ME INDICA SI INICIO LA ESCUCHA DE DATOS
+            O FINALIZO LA COMUNICACION*/
+            dat = (String) this.serv.iniciarComunicacion(this.socket);
+        } catch (IOException ex) {
+            Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String terminal="";
         while(!dat.equals("0")){
-            
-            int i=0;
+            System.out.println("Esperando voTicketAgencia . . . ");
             VoTicketCompleto voTC = new VoTicketCompleto();
-            String terminal="";
-            
-            /* RECIBO LOS DATOS DEL TICKET DESDE UNA TERMINAL DE AGENCIA */
-            while(i<6){
-                dat = this.serv.iniciarComunicacion(this.socket);
-                System.out.println("Datos recibidos: "+dat);
-                switch(i){
-                    case 0: 
-                        voTC.setMatricula(dat);
-                        break;
-                    case 1: 
-                        voTC.setAgenciaVenta(dat);
-                        break;
-                    case 2: 
-                        voTC.setFHVenta(dat);
-                        break;
-                    case 3: 
-                        voTC.setFHInicio(dat);
-                        break;
-                    case 4: 
-                        voTC.setCantMin(Integer.parseInt(dat));
-                        break;
-                    case 5: 
-                        terminal=dat;
-                        break;
-                    }
-                i++;
-            }
-
-            /* GENERO LAS CLASES QUE ME ASISTEN CON EL WS DE IMM*/
-            ServletIMMService s = new ServletIMMService();
-            ServletIMM server = s.getServletIMMPort();
-            /* SE ENVIA EL TICKET HACIA LA IMM PARA SU TRATAMIENTO */
-            VoTicketBasico voTB=server.altaTicketCompleto(voTC);
-            System.out.println("Respuesta Servidor IMM, nro ticket: "+voTB.getNroTicket()+" importe:"+voTB.getImporteTotal());
-            
-            /* SI HUBO ALGUN ERROR EN LA IMM SE DEVUELVE NRO TICKET -1 */
-            if(voTB.getNroTicket() == -1){
-                System.out.println("HUBO ERROR EN RESPUESTA IMM ESTA PARTE NO ESTA IMPLEMENTADA AUN");
-            }
-            
-            /* GENERO EL VO TICKET AGENCIA PARA PODER ENVIARLO A PERSISTIR EN BD DE AGENCIA*/
-            VoTicketAgencia voTA = new VoTicketAgencia();
-            voTA.setNro_ticket(voTB.getNroTicket());
-            voTA.setImporte_total(voTB.getImporteTotal());
-            voTA.setMatricula(voTC.getMatricula());
-            voTA.setTerminal_venta(terminal);
-            voTA.setFecha_hora_venta(voTC.getFHVenta());
-
-            /* SE GUARDA EL TICKET EN EL SERVIDOR DE AGENCIA */
-            String resp;
             try {
-                resp=ia.ventaTicketCompletoAg(voTA);
-                System.out.println("Respuesta Servidor Agencia: "+resp);
-            } catch (SQLException ex) {
-                resp="error_bd";
-            } catch (NamingException ex) {
-                resp="error_interno_sa";
-            } catch (ClassNotFoundException ex) {
-                resp="error_interno_sa";
-            }
+                /* RECIBO LOS DATOS DEL TICKET DESDE UNA TERMINAL DE AGENCIA */
+                VoTicketTerminal voTT = (VoTicketTerminal) this.serv.iniciarComunicacion(this.socket);
+                voTC.setMatricula(voTT.getMatricula());
+                voTC.setAgenciaVenta(voTT.getAgencia());
+                voTC.setFHVenta(voTT.getFecha_hora_venta());
+                voTC.setFHInicio(voTT.getFecha_hora_inicio());
+                voTC.setCantMin(voTT.getMin());
+                terminal = voTT.getTerminal();
+                System.out.println("Datos recibidos correctamente");
+                /* GENERO LAS CLASES QUE ME ASISTEN CON EL WS DE IMM*/
+                ServletIMMService s = new ServletIMMService();
+                ServletIMM server = s.getServletIMMPort();
+                /* SE ENVIA EL TICKET HACIA LA IMM PARA SU TRATAMIENTO */
+                VoTicketBasico voTB=server.altaTicketCompleto(voTC);
+                System.out.println("Respuesta Servidor IMM, nro ticket: "+voTB.getNroTicket()+" importe:"+voTB.getImporteTotal());
 
-            /* ENVIO LOS DATOS HACIA LA TERMINAL DE LA AGENCIA */
-            try {
-                PrintWriter escritura;
-                System.out.println("Iniciando envio de datos hacia terminal . . . ");
-                escritura=new PrintWriter(this.socket.getOutputStream(),true);
-                /* VALIDO QUE NO HAYAN HABIDO ERRORES AL PERSISTIR TICKET EN SA */
-                if("error_bd".equals(resp) || "error_interno_sa".equals(resp)){
-                    linea=resp;
+                /* SI HUBO ALGUN ERROR EN LA IMM SE DEVUELVE NRO TICKET -1 */
+                if(voTB.getNroTicket() == -1){
+                    System.out.println("HUBO ERROR EN RESPUESTA IMM ESTA PARTE NO ESTA IMPLEMENTADA AUN");
                 }else{
-                    linea="Ticket:"+voTA.getNro_ticket()+" Importe:"+voTA.getImporte_total();
-                }
-                escritura.println(linea);        
-            } catch (IOException ex) {
-                System.out.println("ERROR DE IO: "+ex.getMessage());
-            }
+                    /* GENERO EL VO TICKET AGENCIA PARA PODER ENVIARLO A PERSISTIR EN BD DE AGENCIA*/
+                    VoTicketAgencia voTA = new VoTicketAgencia();
+                    voTA.setNro_ticket(voTB.getNroTicket());
+                    voTA.setImporte_total(voTB.getImporteTotal());
+                    voTA.setMatricula(voTC.getMatricula());
+                    voTA.setTerminal_venta(terminal);
+                    voTA.setFecha_hora_venta(voTC.getFHVenta());
 
-            System.out.println("Esperando comunicacion . . . ");
+                    /* SE GUARDA EL TICKET EN EL SERVIDOR DE AGENCIA */
+                    String resp;
+                    try {
+                        resp=ia.ventaTicketCompletoAg(voTA);
+                        System.out.println("Respuesta Servidor Agencia: "+resp);
+                    } catch (SQLException ex) {
+                        resp="error_bd";
+                    } catch (NamingException ex) {
+                        resp="error_interno_sa";
+                    } catch (ClassNotFoundException ex) {
+                        resp="error_interno_sa";
+                    }
+
+                    /* ENVIO LOS DATOS HACIA LA TERMINAL DE LA AGENCIA */
+                    try {
+                        PrintWriter escritura;
+                        System.out.println("Iniciando envio de datos hacia terminal . . . ");
+                        escritura=new PrintWriter(this.socket.getOutputStream(),true);
+                        /* VALIDO QUE NO HAYAN HABIDO ERRORES AL PERSISTIR TICKET EN SA */
+                        if("error_bd".equals(resp) || "error_interno_sa".equals(resp)){
+                            linea=resp;
+                        }else{
+                            linea="Ticket:"+voTA.getNro_ticket()+" Importe:"+voTA.getImporte_total();
+                        }
+                        escritura.println(linea);        
+                    } catch (IOException ex) {
+                        System.out.println("ERROR DE IO: "+ex.getMessage());
+                    }
+                }
+
+
+
+                System.out.println("Esperando comunicacion . . . ");
+
+                try {
+                    dat = (String) this.serv.iniciarComunicacion(this.socket);
+                } catch (IOException ex) {
+                    System.out.println("ERROR DE IO: "+ex.getMessage());
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            } catch (ClassNotFoundException ex) {
+                System.out.println("Error servidor IMM al obtener objeto "+ex.getMessage());
+                dat="0";
+            } catch (IOException ex) {
+                System.out.println("Error servidor IMM al obtener objeto (I/O) "+ex.getMessage());
+                dat="0";
+            }
             
-            dat = this.serv.iniciarComunicacion(this.socket);
         }   
         
         try {
@@ -173,12 +186,18 @@ public class Threads extends Thread {
     }
     
     private boolean validarLogin() throws NamingException, SQLException, ClassNotFoundException{
-        String dat = this.serv.iniciarComunicacion(this.socket);
-        String usuario,clave;
-        usuario=dat.substring(0, dat.indexOf(";"));
-        clave=dat.substring(dat.indexOf(";")+1, dat.length());
-        System.out.println("usuario: "+usuario+" clave:"+clave);
-        return ia.obtenerValidacion(usuario,clave);
+        boolean validacion=false;
+        try {
+            String dat = (String) this.serv.iniciarComunicacion(this.socket);
+            String usuario,clave;
+            usuario=dat.substring(0, dat.indexOf(";"));
+            clave=dat.substring(dat.indexOf(";")+1, dat.length());
+            System.out.println("usuario: "+usuario+" clave:"+clave);
+            validacion= ia.obtenerValidacion(usuario,clave);
+        } catch (IOException ex) {
+            Logger.getLogger(Threads.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return validacion;
     }
     
 }

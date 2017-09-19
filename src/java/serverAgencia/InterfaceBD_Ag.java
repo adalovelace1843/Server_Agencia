@@ -5,9 +5,7 @@
  */
 package serverAgencia;
 
-import java.sql.SQLException;
-import servidorimm.VoTicketCompleto;
-import valueObjects.VoTicket;
+import exceptions.ExPersistencia;
 import valueObjects.VoTicketAgencia;
 
 /**
@@ -15,8 +13,6 @@ import valueObjects.VoTicketAgencia;
  * @author e299227
  */
 public interface InterfaceBD_Ag {
-    public void guardarTicketAg(VoTicket vo) throws SQLException;
-    public void guardarTicketCompletoAg (VoTicketAgencia vo) throws SQLException;
-
-    public boolean obtenerValidacionBD(String usuario, String clave) throws SQLException;
+    public void guardarTicketCompletoAg (VoTicketAgencia vo) throws ExPersistencia;
+    public boolean obtenerValidacionBD(String usuario, String clave) throws ExPersistencia;
 }

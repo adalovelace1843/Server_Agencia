@@ -5,6 +5,7 @@
  */
 package serverAgencia;
 
+import exceptions.ExComunicacion;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,19 +21,16 @@ public class main {
           try {
               // TODO code application logic here
               Servidor s = new Servidor();
-              ServerSocket socket;
               
-              socket = new ServerSocket(1500);
               System.out.println("Esperando comunicacion . . . ");
               
               while(true){
-                  
-                  Socket socketRecepcion = socket.accept();
+                  s.ejecutarServidor();
                   Threads t = new Threads();
-                  t.iniciar(socketRecepcion,s, socket);
+                  t.iniciar(s);
                   t.run();
               }
-          } catch (IOException ex) {
+          }catch (ExComunicacion ex) {
               Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
           }
 

@@ -5,6 +5,7 @@
  */
 package serverAgencia;
 
+import exceptions.ExPersistencia;
 import java.sql.SQLException;
 import javax.naming.NamingException;
 import valueObjects.VoTicket;
@@ -15,8 +16,6 @@ import valueObjects.VoTicketAgencia;
  * @author e299227
  */
 public interface InterfaceAgencia {
-    public String ventaTicketAg(VoTicket vo) throws NamingException,SQLException,ClassNotFoundException;
-    public String ventaTicketCompletoAg(VoTicketAgencia vo) throws NamingException,SQLException,ClassNotFoundException;
-
-    public boolean obtenerValidacion(String usuario, String clave) throws NamingException,SQLException,ClassNotFoundException;
+    public void ventaTicketCompletoAg(VoTicketAgencia vo)throws ExPersistencia;
+    public boolean obtenerValidacion(String usuario, String clave) throws ExPersistencia;
 }

@@ -15,4 +15,7 @@ import valueObjects.VoTicketAgencia;
 public interface InterfaceBD_Ag {
     public void guardarTicketCompletoAg (VoTicketAgencia vo) throws ExPersistencia;
     public boolean obtenerValidacionBD(String usuario, String clave) throws ExPersistencia;
+    public boolean obtenerValidacionTicketBD(int nroTicket) throws ExPersistencia;
+    public void anularTicketBD(int nroTicket, int respuesta) throws ExPersistencia;
+    public boolean exsiteAnulacionBD(int nroTicket) throws ExPersistencia;
 }

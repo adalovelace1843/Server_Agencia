@@ -6,6 +6,7 @@
 package serverAgencia;
 
 import exceptions.ExComunicacion;
+import exceptions.ExServidor;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -31,6 +32,8 @@ public class main {
                   t.run();
               }
           }catch (ExComunicacion ex) {
+              Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (ExServidor ex) {
               Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
           }
 

@@ -26,8 +26,8 @@ public class ObjectFactory {
 
     private final static QName _AltaTicketCompletoResponse_QNAME = new QName("http://servidorimm/", "altaTicketCompletoResponse");
     private final static QName _AltaTicketCompleto_QNAME = new QName("http://servidorimm/", "altaTicketCompleto");
-    private final static QName _AltaTicketResponse_QNAME = new QName("http://servidorimm/", "altaTicketResponse");
-    private final static QName _AltaTicket_QNAME = new QName("http://servidorimm/", "altaTicket");
+    private final static QName _AnularTicketIMMResponse_QNAME = new QName("http://servidorimm/", "anularTicketIMMResponse");
+    private final static QName _AnularTicketIMM_QNAME = new QName("http://servidorimm/", "anularTicketIMM");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: servidorimm
@@ -37,11 +37,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AltaTicket }
+     * Create an instance of {@link AnularTicketIMMResponse }
      * 
      */
-    public AltaTicket createAltaTicket() {
-        return new AltaTicket();
+    public AnularTicketIMMResponse createAnularTicketIMMResponse() {
+        return new AnularTicketIMMResponse();
     }
 
     /**
@@ -53,14 +53,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AltaTicketResponse }
-     * 
-     */
-    public AltaTicketResponse createAltaTicketResponse() {
-        return new AltaTicketResponse();
-    }
-
-    /**
      * Create an instance of {@link AltaTicketCompletoResponse }
      * 
      */
@@ -69,19 +61,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AnularTicketIMM }
+     * 
+     */
+    public AnularTicketIMM createAnularTicketIMM() {
+        return new AnularTicketIMM();
+    }
+
+    /**
      * Create an instance of {@link VoTicketCompleto }
      * 
      */
     public VoTicketCompleto createVoTicketCompleto() {
         return new VoTicketCompleto();
-    }
-
-    /**
-     * Create an instance of {@link VoTicket }
-     * 
-     */
-    public VoTicket createVoTicket() {
-        return new VoTicket();
     }
 
     /**
@@ -111,21 +103,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link AltaTicketResponse }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link AnularTicketIMMResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://servidorimm/", name = "altaTicketResponse")
-    public JAXBElement<AltaTicketResponse> createAltaTicketResponse(AltaTicketResponse value) {
-        return new JAXBElement<AltaTicketResponse>(_AltaTicketResponse_QNAME, AltaTicketResponse.class, null, value);
+    @XmlElementDecl(namespace = "http://servidorimm/", name = "anularTicketIMMResponse")
+    public JAXBElement<AnularTicketIMMResponse> createAnularTicketIMMResponse(AnularTicketIMMResponse value) {
+        return new JAXBElement<AnularTicketIMMResponse>(_AnularTicketIMMResponse_QNAME, AnularTicketIMMResponse.class, null, value);
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link AltaTicket }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link AnularTicketIMM }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://servidorimm/", name = "altaTicket")
-    public JAXBElement<AltaTicket> createAltaTicket(AltaTicket value) {
-        return new JAXBElement<AltaTicket>(_AltaTicket_QNAME, AltaTicket.class, null, value);
+    @XmlElementDecl(namespace = "http://servidorimm/", name = "anularTicketIMM")
+    public JAXBElement<AnularTicketIMM> createAnularTicketIMM(AnularTicketIMM value) {
+        return new JAXBElement<AnularTicketIMM>(_AnularTicketIMM_QNAME, AnularTicketIMM.class, null, value);
     }
 
 }

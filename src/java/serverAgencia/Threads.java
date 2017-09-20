@@ -9,21 +9,9 @@ package serverAgencia;
 
 import exceptions.ExComunicacion;
 import exceptions.ExPersistencia;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.NamingException;
-import servidorimm.ServletIMM;
-import servidorimm.ServletIMMService;
-import servidorimm.VoTicketBasico;
-import servidorimm.VoTicketCompleto;
-import valueObjects.VoTicketAgencia;
-import valueObjects.VoTicketTerminal;
+
 
 /**
  *
@@ -60,6 +48,9 @@ public class Threads extends Thread {
                         break;
                     case "1":
                         serv.altaTicketServer();
+                        break;
+                    case "2":
+                        serv.anularTicketServer();
                         break;
                     default:
                         break;

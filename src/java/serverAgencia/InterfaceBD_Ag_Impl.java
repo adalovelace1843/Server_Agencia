@@ -11,7 +11,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import valueObjects.VoTicket;
+
 import valueObjects.VoTicketAgencia;
 
 /**
@@ -19,7 +19,7 @@ import valueObjects.VoTicketAgencia;
  * @author e299227
  */
 public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
-     private static Connection conn;
+    private static Connection conn;
     private static InterfaceBD_Ag_Impl instancia;
     
     
@@ -85,6 +85,58 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
             
          } catch (SQLException ex) {
              throw new ExPersistencia("Error en BD al obtener validacion (SA)");
+         }
+        return resultado;
+    }
+
+    @Override
+    public boolean obtenerValidacionTicketBD(int nroTicket) throws ExPersistencia {
+        boolean resultado=false;
+        try {
+            String sql="select * from ventascompleto where numero=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, nroTicket);
+            ResultSet rs =ps.executeQuery();
+            if(rs.next()){
+                 resultado=true;
+             }
+             rs.close();
+             ps.close();
+        } catch (SQLException ex) {
+             throw new ExPersistencia("Error en BD al obtener validacion Ticket (SA)");
+         }
+        return resultado;
+    }
+
+    @Override
+    public void anularTicketBD(int nroTicket, int respuesta) throws ExPersistencia {
+        try {
+            String sql="INSERT INTO anulaciones (transaccion,numero) values (?,?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, respuesta);
+            ps.setInt(2, nroTicket);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+             throw new ExPersistencia("Error en BD anular el ticket, favor contactar con soporte para anulacion manual en BD agencia");
+         }
+    }
+
+    @Override
+    public boolean exsiteAnulacionBD(int nroTicket) throws ExPersistencia {
+         boolean resultado=false;
+        try {
+            String sql="select * from anulaciones where numero=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, nroTicket);
+            ResultSet rs =ps.executeQuery();
+            if(rs.next()){
+                 resultado=true;
+             }
+             rs.close();
+             ps.close();
+        } catch (SQLException ex) {
+             throw new ExPersistencia("Error en BD al obtener existencia de anulacion de Ticket (SA)");
          }
         return resultado;
     }

@@ -6,6 +6,8 @@
 package serverAgencia;
 
 import exceptions.ExPersistencia;
+import exceptions.ExWebServiceIMM;
+import javax.xml.ws.WebServiceException;
 import servidorimm.ServletIMM;
 import servidorimm.ServletIMMService;
 
@@ -35,17 +37,21 @@ public class InterfaceAgenciaImpl implements InterfaceAgencia {
     }
 
     @Override
-    public int anularTicket(int nroTicket, String agencia_servidor) throws ExPersistencia {
-        /* GENERO LAS CLASES QUE ME ASISTEN CON EL WS DE IMM*/
-        ServletIMMService s = new ServletIMMService();
-        ServletIMM server = s.getServletIMMPort();
+    public int anularTicket(int nroTicket) throws ExPersistencia,ExWebServiceIMM {
         int respuesta=0;
-        /* SE ENVIA EL Nro de ticket a anular HACIA LA IMM PARA SU TRATAMIENTO */
-        respuesta = server.anularTicketIMM(nroTicket);
+        try{
+            /* GENERO LAS CLASES QUE ME ASISTEN CON EL WS DE IMM*/
+            ServletIMMService s = new ServletIMMService();
+            ServletIMM server = s.getServletIMMPort();
 
-        if(respuesta > 0){
-            InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
-            in.anularTicketBD(nroTicket, respuesta);
+            /* SE ENVIA EL Nro de ticket a anular HACIA LA IMM PARA SU TRATAMIENTO */
+            respuesta = server.anularTicketIMM(nroTicket);
+            if(respuesta > 0){
+                InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
+                in.anularTicketBD(nroTicket, respuesta);
+            }
+        }catch(WebServiceException ex){
+            throw new ExWebServiceIMM("Error al conectarse con WS IMM, se interrumpio la transaccion");
         }
         return respuesta;
     }

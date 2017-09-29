@@ -10,12 +10,7 @@ import exceptions.ExComunicacion;
 import exceptions.ExPersistencia;
 import exceptions.ExServidor;
 import exceptions.ExWebServiceIMM;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.Socket;
 import javax.xml.ws.WebServiceException;
 import servidorimm.ServletIMM;
 import servidorimm.ServletIMMService;
@@ -31,48 +26,42 @@ import valueObjects.VoTicketTerminal;
  */
 public class Servidor {
     private Comunicacion com;
-    private InterfaceAgencia ia = new InterfaceAgenciaImpl();
-
+    private InterfaceAgencia ia ;
+   
 
     public Servidor() throws ExComunicacion, ExServidor {
+        ia = new InterfaceAgenciaImpl();
         com = new Comunicacion();
-        com.crearComunicacion(1500);
-  
     }
-    
 
      
-    public void ejecutarServidor() throws ExComunicacion{
-        com.esperandoComunicacion();
-
-    }
    
-    public void validarLogin() throws ExComunicacion, ExPersistencia{
+    public void validarLogin(Socket s) throws ExComunicacion, ExPersistencia{
         boolean validacion=false;
         while(!validacion){
-            String dat = (String) com.reciboDatos();
+            String dat = (String) com.reciboDatos(s);
             String usuario,clave;
             usuario=dat.substring(0, dat.indexOf(";"));
             clave=dat.substring(dat.indexOf(";")+1, dat.length());
             /* HAGO CONSULTA SI EL USUARIO Y CLAVE SON VALIDOS EN LA PERSISTENCIA*/
             validacion= ia.obtenerValidacion(usuario,clave);
             if(validacion){
-                com.envioDatos("OK");
+                com.envioDatos("OK",s);
             }else{
-                com.envioDatos("ERROR");
+                com.envioDatos("ERROR",s);
             }
         }
     }
     
-    public String obenerComando() throws ExComunicacion{
-        return (String) com.reciboDatos();
+    public String obenerComando(Socket s) throws ExComunicacion{
+        return (String) com.reciboDatos(s);
     }
     
-    public void altaTicketServer() throws ExComunicacion{
+    public void altaTicketServer(Socket s) throws ExComunicacion{
         try {
             String respuesta = "ERROR ALTA TICKET";
             /* RECIBO LOS DATOS DEL TICKET DESDE UNA TERMINAL DE AGENCIA */
-            VoTicketTerminal voTT = (VoTicketTerminal) com.reciboDatos();
+            VoTicketTerminal voTT = (VoTicketTerminal) com.reciboDatos(s);
             VoTicketCompleto voTC = new VoTicketCompleto();
             voTC.setMatricula(voTT.getMatricula());
             voTC.setAgenciaVenta(voTT.getAgencia());
@@ -83,7 +72,7 @@ public class Servidor {
             System.out.println("Datos recibidos correctamente");
             VoTicketBasico voTB = enviarTicketIMM(voTC);
             if(voTB.getNroTicket() == -1){
-                com.envioDatos("Hubo un error en el envio hacia la IMM, se cancela transaccion.");
+                com.envioDatos("Hubo un error en el envio hacia la IMM, se cancela transaccion.",s);
             }else{
                 /* GENERO EL VO TICKET AGENCIA PARA PODER ENVIARLO A PERSISTIR EN BD DE AGENCIA*/
                 VoTicketAgencia voTA = new VoTicketAgencia();
@@ -95,13 +84,13 @@ public class Servidor {
                 try {
                     persistirBDAgencia(voTA);
                     System.out.println("Iniciando envio de datos hacia terminal . . . ");
-                    com.envioDatos("Nro ticket: "+voTB.getNroTicket()+" importe: "+voTB.getImporteTotal());
+                    com.envioDatos("Nro ticket: "+voTB.getNroTicket()+" importe: "+voTB.getImporteTotal(),s);
                 } catch (ExPersistencia ex) {
-                    com.envioDatos(ex.getMessage());
+                    com.envioDatos(ex.getMessage(),s);
                 }
             }
         } catch (ExWebServiceIMM ex) {
-            com.envioDatos(ex.getMessage());
+            com.envioDatos(ex.getMessage(),s);
         }
         
     }
@@ -126,33 +115,33 @@ public class Servidor {
         ia.ventaTicketCompletoAg(voTA);
     }
     
-    public void finalizarSesion() throws ExComunicacion{
-        com.Finalizar();
+    public void finalizarSesion(Socket s) throws ExComunicacion{
+        com.Finalizar(s);
     }
 
-    public void anularTicketServer() throws ExComunicacion{  
+    public void anularTicketServer(Socket s) throws ExComunicacion{  
         try {
-            int nroTicket= (int) com.reciboDatos();
+            int nroTicket= (int) com.reciboDatos(s);
             if(!ia.existeAnulacion(nroTicket)){
                 if(ia.existeTicket(nroTicket)){
                     int transaccion=ia.anularTicket(nroTicket);
                     if(transaccion == -1){
-                        com.envioDatos("Hubo un error en el servidor de la IMM, no se pudo anular el ticket");
+                        com.envioDatos("Hubo un error en el servidor de la IMM, no se pudo anular el ticket",s);
                     }else{
-                        com.envioDatos("Ticket anulado correctamente, nro de transaccion: "+transaccion);           
+                        com.envioDatos("Ticket anulado correctamente, nro de transaccion: "+transaccion,s);           
                     }
                 }else{
-                    com.envioDatos("El ticket no está registrado en la agencia");
+                    com.envioDatos("El ticket no está registrado en la agencia",s);
                 }
             }else{
-                com.envioDatos("Ya existe una anulación para el ticket");
+                com.envioDatos("Ya existe una anulación para el ticket",s);
             }
         } catch (ExComunicacion ex) {
-            com.envioDatos(ex.getMessage());
+            com.envioDatos(ex.getMessage(),s);
         } catch (ExPersistencia ex) {
-            com.envioDatos(ex.getMessage());
+            com.envioDatos(ex.getMessage(),s);
         } catch (ExWebServiceIMM ex) {
-            com.envioDatos(ex.getMessage());
+            com.envioDatos(ex.getMessage(),s);
         } 
     }
 }

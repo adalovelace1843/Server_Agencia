@@ -11,6 +11,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
 import valueObjects.VoTicketAgencia;
 
@@ -26,14 +29,23 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
     public static InterfaceBD_Ag_Impl getInstance() throws ExPersistencia{
         if(instancia == null){
             instancia = new InterfaceBD_Ag_Impl();
-                instancia.conectarBD();
-
+            instancia.conectarBD();
         }
         return instancia;
     }
     
     private void conectarBD() throws ExPersistencia {
          try {
+            InitialContext initContext = new InitialContext();
+            DataSource ds = (DataSource)initContext.lookup("java:jboss/datasources/MySqlDS2/");
+            conn = ds.getConnection();
+        } catch (NamingException ex) {
+            throw new ExPersistencia("Error al intentar conectarse a la BD (SA)");
+        } catch (SQLException ex) {
+            throw new ExPersistencia("Error al conectarse con la BD (SA)");
+        }
+        /*viejo
+        try {
              Class.forName("com.mysql.jdbc.Driver");
              conn = DriverManager.getConnection("jdbc:mysql://10.36.6.110/bd_agencia?user=root&password=root");
             } catch (SQLException ex) {
@@ -41,7 +53,7 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
             } catch (ClassNotFoundException ex) {
                 throw new ExPersistencia("Error en BD al obtener interfaz 3 (SA)");
             }
-
+        */
     }
         
     /**

@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="agencia_venta" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="cant_min" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="estado" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="f_h_inicio" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="f_h_venta" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="matricula" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -34,6 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "voTicketCompleto", propOrder = {
     "agenciaVenta",
     "cantMin",
+    "estado",
     "fhInicio",
     "fhVenta",
     "matricula"
@@ -46,6 +48,7 @@ public class VoTicketCompleto
     protected String agenciaVenta;
     @XmlElement(name = "cant_min")
     protected int cantMin;
+    protected String estado;
     @XmlElement(name = "f_h_inicio")
     protected String fhInicio;
     @XmlElement(name = "f_h_venta")
@@ -90,6 +93,30 @@ public class VoTicketCompleto
      */
     public void setCantMin(int value) {
         this.cantMin = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad estado.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getEstado() {
+        return estado;
+    }
+
+    /**
+     * Define el valor de la propiedad estado.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setEstado(String value) {
+        this.estado = value;
     }
 
     /**

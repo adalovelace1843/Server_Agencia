@@ -9,4 +9,13 @@
             30
         </session-timeout>
     </session-config>
+    <servlet>
+        <servlet-name>ServletServidor</servlet-name>
+        <servlet-class>serverAgencia.ServletServidor</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+     <servlet-mapping>
+        <servlet-name>ServletServidor</servlet-name>
+        <url-pattern>/ServletServidor</url-pattern>
+    </servlet-mapping>
 </web-app>

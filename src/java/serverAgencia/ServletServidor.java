@@ -33,25 +33,8 @@ public class ServletServidor extends HttpServlet {
     }
     
     private void iniciarServidor(){
-        try {
-              // TODO code application logic here
-              Servidor s = new Servidor();
-              ServerSocket socket = new ServerSocket(1500);
-              System.out.println("Esperando comunicacion . . . ");
-              
-              while(true){
-                  Socket socketRecepcion = socket.accept();
-                  Threads t = new Threads();
-                  t.iniciar(s,socketRecepcion);
-                  t.start();
-              }
-          }catch (ExComunicacion ex) {
-              Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-          } catch (ExServidor ex) {
-              Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-          } catch (IOException ex) {
-             Logger.getLogger(ServletServidor.class.getName()).log(Level.SEVERE, null, ex);
-         }
+        InicioServidor i = new InicioServidor();
+        i.start();
 
     }
 }

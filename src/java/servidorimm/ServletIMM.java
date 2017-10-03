@@ -25,6 +25,7 @@ public interface ServletIMM {
 
     /**
      * 
+     * @param arg1
      * @param arg0
      * @return
      *     returns int
@@ -35,7 +36,9 @@ public interface ServletIMM {
     @ResponseWrapper(localName = "anularTicketIMMResponse", targetNamespace = "http://servidorimm/", className = "servidorimm.AnularTicketIMMResponse")
     public int anularTicketIMM(
         @WebParam(name = "arg0", targetNamespace = "")
-        int arg0);
+        int arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1);
 
     /**
      * 

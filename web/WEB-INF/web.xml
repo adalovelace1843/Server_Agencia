@@ -9,6 +9,10 @@
             30
         </session-timeout>
     </session-config>
+    <context-param>
+        <param-name>agencia</param-name>
+        <param-value>Aguada</param-value>
+    </context-param>
     <servlet>
         <servlet-name>ServletServidor</servlet-name>
         <servlet-class>serverAgencia.ServletServidor</servlet-class>

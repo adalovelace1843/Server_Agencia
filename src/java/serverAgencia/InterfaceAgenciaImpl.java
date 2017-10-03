@@ -37,7 +37,7 @@ public class InterfaceAgenciaImpl implements InterfaceAgencia {
     }
 
     @Override
-    public int anularTicket(int nroTicket) throws ExPersistencia,ExWebServiceIMM {
+    public int anularTicket(int nroTicket, String agencia) throws ExPersistencia,ExWebServiceIMM {
         int respuesta=0;
         try{
             /* GENERO LAS CLASES QUE ME ASISTEN CON EL WS DE IMM*/
@@ -45,7 +45,7 @@ public class InterfaceAgenciaImpl implements InterfaceAgencia {
             ServletIMM server = s.getServletIMMPort();
 
             /* SE ENVIA EL Nro de ticket a anular HACIA LA IMM PARA SU TRATAMIENTO */
-            respuesta = server.anularTicketIMM(nroTicket);
+            respuesta = server.anularTicketIMM(nroTicket, agencia);
             if(respuesta > 0){
                 InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
                 in.anularTicketBD(nroTicket, respuesta);

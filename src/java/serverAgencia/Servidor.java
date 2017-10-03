@@ -27,11 +27,13 @@ import valueObjects.VoTicketTerminal;
 public class Servidor {
     private Comunicacion com;
     private InterfaceAgencia ia ;
+    private String agencia;
    
 
-    public Servidor() throws ExComunicacion, ExServidor {
+    public Servidor(String agencia) throws ExComunicacion, ExServidor {
         ia = new InterfaceAgenciaImpl();
         com = new Comunicacion();
+        this.agencia=agencia;
     }
 
      
@@ -64,7 +66,7 @@ public class Servidor {
             VoTicketTerminal voTT = (VoTicketTerminal) com.reciboDatos(s);
             VoTicketCompleto voTC = new VoTicketCompleto();
             voTC.setMatricula(voTT.getMatricula());
-            voTC.setAgenciaVenta(voTT.getAgencia());
+            voTC.setAgenciaVenta(this.agencia);
             voTC.setFHVenta(voTT.getFecha_hora_venta());
             voTC.setFHInicio(voTT.getFecha_hora_inicio());
             voTC.setCantMin(voTT.getMin());
@@ -124,7 +126,7 @@ public class Servidor {
             int nroTicket= (int) com.reciboDatos(s);
             if(!ia.existeAnulacion(nroTicket)){
                 if(ia.existeTicket(nroTicket)){
-                    int transaccion=ia.anularTicket(nroTicket);
+                    int transaccion=ia.anularTicket(nroTicket,this.agencia);
                     if(transaccion == -1){
                         com.envioDatos("Hubo un error en el servidor de la IMM, no se pudo anular el ticket",s);
                     }else{

@@ -33,7 +33,8 @@ public class ServletServidor extends HttpServlet {
     }
     
     private void iniciarServidor(){
-        InicioServidor i = new InicioServidor();
+        String agencia=getServletContext().getInitParameter("agencia");
+        InicioServidor i = new InicioServidor(agencia);
         i.start();
 
     }

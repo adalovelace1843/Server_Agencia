@@ -18,16 +18,17 @@ import java.util.logging.Logger;
  * @author e299227
  */
 public class InicioServidor extends Thread{
+    private String agencia;
     
-    public InicioServidor(){
-        
+    public InicioServidor(String agencia){
+        this.agencia=agencia;
     }
     
     @Override
     public void run(){
         try {
               // TODO code application logic here
-              Servidor s = new Servidor();
+              Servidor s = new Servidor(agencia);
               ServerSocket socket = new ServerSocket(1500);
               System.out.println("Esperando comunicacion v2.0  . . . ");
 

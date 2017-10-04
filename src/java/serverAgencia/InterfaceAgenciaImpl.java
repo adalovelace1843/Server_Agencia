@@ -10,6 +10,7 @@ import exceptions.ExWebServiceIMM;
 import javax.xml.ws.WebServiceException;
 import servidorimm.ServletIMM;
 import servidorimm.ServletIMMService;
+import valueObjects.voUsuario;
 
 /**
  *
@@ -24,9 +25,9 @@ public class InterfaceAgenciaImpl implements InterfaceAgencia {
     }
 
     @Override
-    public boolean obtenerValidacion(String usuario, String clave) throws ExPersistencia{
+    public boolean obtenerValidacion(String usuario, String clave, String terminal) throws ExPersistencia{
         InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
-        return in.obtenerValidacionBD(usuario,clave);
+        return in.obtenerValidacionBD(usuario,clave, terminal);
 
     }
 
@@ -60,6 +61,30 @@ public class InterfaceAgenciaImpl implements InterfaceAgencia {
     public boolean existeAnulacion(int nroTicket) throws ExPersistencia {
         InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
         return in.exsiteAnulacionBD(nroTicket);
+    }
+
+    @Override
+    public boolean obtenerValidacionAgencia(String usuario, String clave) throws ExPersistencia {
+        InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
+        return in.obtenerValidacionAgenciaBD(usuario,clave);
+    }
+
+    @Override
+    public void altaUsuario(voUsuario vo) throws ExPersistencia {
+       InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
+       in.altaUsuarioBD(vo);
+    }
+
+    @Override
+    public void agregarTerminalUsuario(String usuario, String terminal) throws ExPersistencia {
+        InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
+        in.agregarTerminalUsuarioBD(usuario,terminal);
+    }
+
+    @Override
+    public void bajaUsuario(String parameter) throws ExPersistencia {
+        InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
+        in.bajaUsuarioBD(parameter);
     }
     
 }

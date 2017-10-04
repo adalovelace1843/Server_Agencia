@@ -22,4 +22,31 @@
         <servlet-name>ServletServidor</servlet-name>
         <url-pattern>/ServletServidor</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>ServletIngresoUsuarios</servlet-name>
+        <servlet-class>servlets.ServletIngresoUsuarios</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+     <servlet-mapping>
+        <servlet-name>ServletIngresoUsuarios</servlet-name>
+        <url-pattern>/ServletIngresoUsuarios</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ServletLogin</servlet-name>
+        <servlet-class>servlets.ServletLogin</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+     <servlet-mapping>
+        <servlet-name>ServletLogin</servlet-name>
+        <url-pattern>/ServletLogin</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ServletMenu</servlet-name>
+        <servlet-class>servlets.ServletMenu</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+     <servlet-mapping>
+        <servlet-name>ServletMenu</servlet-name>
+        <url-pattern>/ServletMenu</url-pattern>
+    </servlet-mapping>
 </web-app>

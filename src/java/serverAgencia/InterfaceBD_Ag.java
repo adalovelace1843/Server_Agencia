@@ -7,6 +7,7 @@ package serverAgencia;
 
 import exceptions.ExPersistencia;
 import valueObjects.VoTicketAgencia;
+import valueObjects.voUsuario;
 
 /**
  *
@@ -14,8 +15,13 @@ import valueObjects.VoTicketAgencia;
  */
 public interface InterfaceBD_Ag {
     public void guardarTicketCompletoAg (VoTicketAgencia vo) throws ExPersistencia;
-    public boolean obtenerValidacionBD(String usuario, String clave) throws ExPersistencia;
+    public boolean obtenerValidacionBD(String usuario, String clave,String terminal) throws ExPersistencia;
     public boolean obtenerValidacionTicketBD(int nroTicket) throws ExPersistencia;
     public void anularTicketBD(int nroTicket, int respuesta) throws ExPersistencia;
     public boolean exsiteAnulacionBD(int nroTicket) throws ExPersistencia;
+    public boolean obtenerValidacionAgenciaBD(String usuario, String clave)throws ExPersistencia;
+    public void altaUsuarioBD(voUsuario vo)throws ExPersistencia;
+    public void agregarTerminalUsuarioBD(String usuario, String terminal)throws ExPersistencia;
+    public void bajaUsuarioBD(String parameter)throws ExPersistencia;
+
 }

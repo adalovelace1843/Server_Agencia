@@ -9,9 +9,27 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Agencia</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h3>Ingreso de usuarios</h3>
+        <form action="ServletLogin" method="POST">
+            <table>
+                <tr>
+                    <td><label>Usuario</label></td>
+                    <td><input type="text" name="usuario" id="usuario" ></td>
+                </tr>
+                <tr>
+                    <td><label>Clave</label></td>
+                    <td><input type="password" name="clave" id="clave"></td>
+                </tr>
+
+                <tr>
+                    <td><button type="submit">Ingresar</button></td>
+                </tr>
+
+            </table>
+
+	</form>
     </body>
 </html>

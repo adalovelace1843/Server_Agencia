@@ -18,6 +18,7 @@ import servidorimm.VoTicketBasico;
 import servidorimm.VoTicketCompleto;
 import valueObjects.VoTicketAgencia;
 import valueObjects.VoTicketTerminal;
+import valueObjects.voLogin;
 
 
 /**
@@ -41,12 +42,10 @@ public class Servidor {
     public void validarLogin(Socket s) throws ExComunicacion, ExPersistencia{
         boolean validacion=false;
         while(!validacion){
-            String dat = (String) com.reciboDatos(s);
-            String usuario,clave;
-            usuario=dat.substring(0, dat.indexOf(";"));
-            clave=dat.substring(dat.indexOf(";")+1, dat.length());
+            voLogin vo = (voLogin) com.reciboDatos(s);
+         
             /* HAGO CONSULTA SI EL USUARIO Y CLAVE SON VALIDOS EN LA PERSISTENCIA*/
-            validacion= ia.obtenerValidacion(usuario,clave);
+            validacion= ia.obtenerValidacion(vo.getUsuario(),vo.getClave(),vo.getTerminal());
             if(validacion){
                 com.envioDatos("OK",s);
             }else{

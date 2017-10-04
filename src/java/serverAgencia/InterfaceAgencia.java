@@ -8,6 +8,7 @@ package serverAgencia;
 import exceptions.ExPersistencia;
 import exceptions.ExWebServiceIMM;
 import valueObjects.VoTicketAgencia;
+import valueObjects.voUsuario;
 
 /**
  *
@@ -15,8 +16,12 @@ import valueObjects.VoTicketAgencia;
  */
 public interface InterfaceAgencia {
     public void ventaTicketCompletoAg(VoTicketAgencia vo)throws ExPersistencia;
-    public boolean obtenerValidacion(String usuario, String clave) throws ExPersistencia;
+    public boolean obtenerValidacion(String usuario, String clave, String terminal) throws ExPersistencia;
     public boolean existeTicket(int nroTicket) throws ExPersistencia;
     public int anularTicket(int nroTicket, String agencia) throws ExPersistencia,ExWebServiceIMM;
     public boolean existeAnulacion(int nroTicket) throws ExPersistencia;
+    public boolean obtenerValidacionAgencia(String usuario, String clave)  throws ExPersistencia;
+    public void altaUsuario(voUsuario vo)  throws ExPersistencia;
+    public void agregarTerminalUsuario(String usuario, String terminal)throws ExPersistencia;
+    public void bajaUsuario(String parameter)throws ExPersistencia;
 }

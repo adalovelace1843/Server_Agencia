@@ -49,4 +49,13 @@
         <servlet-name>ServletMenu</servlet-name>
         <url-pattern>/ServletMenu</url-pattern>
     </servlet-mapping>
+      <servlet>
+        <servlet-name>ServletTerminales</servlet-name>
+        <servlet-class>servlets.ServletTerminales</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+     <servlet-mapping>
+        <servlet-name>ServletTerminales</servlet-name>
+        <url-pattern>/ServletTerminales</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -7,6 +7,7 @@ package serverAgencia;
 
 import exceptions.ExPersistencia;
 import exceptions.ExWebServiceIMM;
+import java.util.ArrayList;
 import valueObjects.VoTicketAgencia;
 import valueObjects.voUsuario;
 
@@ -24,4 +25,8 @@ public interface InterfaceAgencia {
     public void altaUsuario(voUsuario vo)  throws ExPersistencia;
     public void agregarTerminalUsuario(String usuario, String terminal)throws ExPersistencia;
     public void bajaUsuario(String parameter)throws ExPersistencia;
+    public void altaTerminal(String parameter)throws ExPersistencia;
+    public ArrayList obtenerTerminales()throws ExPersistencia;
+
+    public void bajaTerminal(String parameter)throws ExPersistencia;
 }

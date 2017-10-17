@@ -34,10 +34,6 @@
                 <td><input type="text" name="clave" id="clave" required="true"></td>
             </tr>
             <tr>
-                <td><label>Terminal</label></td>
-                <td><input type="text" name="terminal" id="terminal" required="true"></td>
-            </tr>
-            <tr>
                 <td><label>Web</label></td>
                 <td>
                     <select name="web" >

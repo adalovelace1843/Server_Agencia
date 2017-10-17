@@ -5,16 +5,21 @@
  */
 package servlets;
 
+import exceptions.ExPersistencia;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import serverAgencia.InterfaceAgencia;
+import serverAgencia.InterfaceAgenciaImpl;
 
 /**
  *
@@ -53,9 +58,23 @@ public class ServletMenu extends HttpServlet {
             throws ServletException, IOException {
         String opcion = request.getParameter("opc");
         RequestDispatcher rd;
+        InterfaceAgencia ia= new InterfaceAgenciaImpl(); 
         switch(opcion){
             case "usuarios":
                 rd=request.getRequestDispatcher("/usuarios.jsp");
+                rd.forward(request,response);
+                break;
+            case "terminales":
+                try {
+                    ArrayList listaTerminales=ia.obtenerTerminales();
+                    request.setAttribute("listadoTerminales", listaTerminales);
+                } catch (ExPersistencia ex) {
+                    rd=request.getRequestDispatcher("/mensaje.jsp");      
+                    request.setAttribute("mensaje", ex.getMessage());
+                    rd.forward(request,response);
+                }
+
+                rd=request.getRequestDispatcher("/terminales.jsp");     
                 rd.forward(request,response);
                 break;
             case "listado":

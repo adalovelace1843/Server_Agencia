@@ -7,6 +7,7 @@ package serverAgencia;
 
 import exceptions.ExPersistencia;
 import exceptions.ExWebServiceIMM;
+import java.util.ArrayList;
 import javax.xml.ws.WebServiceException;
 import servidorimm.ServletIMM;
 import servidorimm.ServletIMMService;
@@ -85,6 +86,24 @@ public class InterfaceAgenciaImpl implements InterfaceAgencia {
     public void bajaUsuario(String parameter) throws ExPersistencia {
         InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
         in.bajaUsuarioBD(parameter);
+    }
+
+    @Override
+    public void altaTerminal(String parameter) throws ExPersistencia {
+        InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
+        in.altaTerminalBD(parameter);
+    }
+
+    @Override
+    public ArrayList obtenerTerminales() throws ExPersistencia {
+        InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
+        return in.obtenerTerminalesBD();
+    }
+
+    @Override
+    public void bajaTerminal(String parameter) throws ExPersistencia {
+        InterfaceBD_Ag in = InterfaceBD_Ag_Impl.getInstance();
+        in.bajaTerminalBD(parameter);
     }
     
 }

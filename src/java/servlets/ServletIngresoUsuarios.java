@@ -54,10 +54,8 @@ public class ServletIngresoUsuarios extends HttpServlet {
                 voUsuario vo = new voUsuario();
                 vo.setUsuario(request.getParameter("usuario"));
                 vo.setClave(request.getParameter("clave"));
-                vo.setTerminal(request.getParameter("terminal"));
                 vo.setWeb(Integer.parseInt(request.getParameter("web")));
 
-                
                 RequestDispatcher rd;
                 try {
                     ia.altaUsuario(vo);

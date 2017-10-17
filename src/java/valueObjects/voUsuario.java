@@ -12,7 +12,6 @@ package valueObjects;
 public class voUsuario {
     private String usuario;
     private String clave;
-    private String terminal;
     private int web;
 
     public voUsuario() {
@@ -34,13 +33,6 @@ public class voUsuario {
         this.clave = clave;
     }
 
-    public String getTerminal() {
-        return terminal;
-    }
-
-    public void setTerminal(String terminal) {
-        this.terminal = terminal;
-    }
 
     public int getWeb() {
         return web;

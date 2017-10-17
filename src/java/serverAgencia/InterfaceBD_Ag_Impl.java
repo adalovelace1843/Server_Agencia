@@ -11,6 +11,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -185,15 +188,7 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
             ps.setString(1, vo.getUsuario());
             ps.setString(2, vo.getClave());
             ps.setInt(3, vo.getWeb());
-            int i=ps.executeUpdate();
-            if(i == 1){
-                String sql2="insert into usuario_terminal (usuario, terminal) values (?,?)";
-                PreparedStatement ps2 = conn.prepareStatement(sql2);
-                ps2.setString(1, vo.getUsuario());
-                ps2.setString(2, vo.getTerminal());
-                ps2.executeUpdate();
-                ps2.close();
-            }
+            ps.executeUpdate();
             ps.close();     
         } catch (SQLException ex) {
             if(ex.getErrorCode() == 1062){
@@ -248,5 +243,53 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
         } catch (SQLException ex) {
             throw new ExPersistencia("No se pudo eliminar al usuario. Error: "+ex.getMessage());
         }
+    }
+
+    @Override
+    public void altaTerminalBD(String parameter) throws ExPersistencia {
+        
+        try {
+            String query="insert into terminales (terminal) values (?)";
+            PreparedStatement ps= conn.prepareStatement(query);
+            ps.setString(1, parameter);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+           throw new ExPersistencia("No se pudo insertar la terminal. Error: "+ex.getMessage());
+        }
+        
+    }
+
+    @Override
+    public ArrayList obtenerTerminalesBD() throws ExPersistencia {
+        ArrayList listado = new ArrayList();
+        try {
+           
+            String query="select terminal from terminales";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                listado.add(rs.getString("terminal"));
+            }
+            rs.close();
+            ps.close();
+           
+        } catch (SQLException ex) {
+            throw new ExPersistencia("Error al obtener listado de terminales. Error: "+ex.getMessage());
+        }
+         return listado;
+    }
+
+    @Override
+    public void bajaTerminalBD(String parameter) throws ExPersistencia {
+        try {
+            String query="delete from terminales where terminal=?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, parameter);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            throw new ExPersistencia("Error al eliminar la terminal. Error: "+ex.getMessage());
+        }
+        
     }
 }

@@ -6,6 +6,7 @@
 package serverAgencia;
 
 import exceptions.ExPersistencia;
+import java.util.ArrayList;
 import valueObjects.VoTicketAgencia;
 import valueObjects.voUsuario;
 
@@ -23,5 +24,8 @@ public interface InterfaceBD_Ag {
     public void altaUsuarioBD(voUsuario vo)throws ExPersistencia;
     public void agregarTerminalUsuarioBD(String usuario, String terminal)throws ExPersistencia;
     public void bajaUsuarioBD(String parameter)throws ExPersistencia;
+    public void altaTerminalBD(String parameter)throws ExPersistencia;
+    public ArrayList obtenerTerminalesBD()throws ExPersistencia;
+    public void bajaTerminalBD(String parameter)throws ExPersistencia;
 
 }

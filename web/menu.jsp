@@ -15,6 +15,7 @@
         <h3>Menu</h3>
        
         <div><a href="ServletMenu?opc=usuarios">Gestion de usuarios</a></div>
+        <div><a href="ServletMenu?opc=terminales">Gestion de terminales</a></div>
         <div><a href="ServletMenu?opc=listado">Listado</a></div>
     </body>
 </html>

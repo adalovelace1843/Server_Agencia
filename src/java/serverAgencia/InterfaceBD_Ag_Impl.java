@@ -248,15 +248,11 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, parameter);
             int i=ps.executeUpdate();
-            if(i>0){
-                String sql2="delete from usuarios where usuario=?";
-                PreparedStatement ps2 = conn.prepareStatement(sql2);
-                ps2.setString(1, parameter);
-                ps2.executeUpdate();
-                ps2.close();
-            }else{
-                throw new ExPersistencia("No existe un usuario creado con ese nombre.");
-            }
+            String sql2="delete from usuarios where usuario=?";
+            PreparedStatement ps2 = conn.prepareStatement(sql2);
+            ps2.setString(1, parameter);
+            ps2.executeUpdate();
+            ps2.close();
             ps.close();     
         } catch (SQLException ex) {
             throw new ExPersistencia("No se pudo eliminar al usuario. Error: "+ex.getMessage());

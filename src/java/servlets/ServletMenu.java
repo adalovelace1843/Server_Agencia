@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import serverAgencia.InterfaceAgencia;
 import serverAgencia.InterfaceAgenciaImpl;
+import valueObjects.VoCheckbox;
 
 /**
  *
@@ -61,21 +62,33 @@ public class ServletMenu extends HttpServlet {
         InterfaceAgencia ia= new InterfaceAgenciaImpl(); 
         switch(opcion){
             case "usuarios":
-                rd=request.getRequestDispatcher("/usuarios.jsp");
-                rd.forward(request,response);
-                break;
-            case "terminales":
                 try {
-                    ArrayList listaTerminales=ia.obtenerTerminales();
+                    ArrayList listaUsuarios=ia.obtenerUsuarios();
+                    request.setAttribute("listadoUsuarios",listaUsuarios);
+                    
+                    List<VoCheckbox> listaTerminales=ia.obtenerTerminales();
                     request.setAttribute("listadoTerminales", listaTerminales);
+                    
+                    rd=request.getRequestDispatcher("/usuarios.jsp");
+                    rd.forward(request,response);
                 } catch (ExPersistencia ex) {
                     rd=request.getRequestDispatcher("/mensaje.jsp");      
                     request.setAttribute("mensaje", ex.getMessage());
                     rd.forward(request,response);
                 }
-
-                rd=request.getRequestDispatcher("/terminales.jsp");     
-                rd.forward(request,response);
+                    
+                break;
+            case "terminales":
+                try {
+                    List<VoCheckbox> listaTerminales=ia.obtenerTerminales();
+                    request.setAttribute("listadoTerminales", listaTerminales);
+                    rd=request.getRequestDispatcher("/terminales.jsp");     
+                    rd.forward(request,response);
+                } catch (ExPersistencia ex) {
+                    rd=request.getRequestDispatcher("/mensaje.jsp");      
+                    request.setAttribute("mensaje", ex.getMessage());
+                    rd.forward(request,response);
+                }
                 break;
             case "listado":
                 rd=request.getRequestDispatcher("/listado.jsp");

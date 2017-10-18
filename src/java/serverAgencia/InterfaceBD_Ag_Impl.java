@@ -12,11 +12,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import jdk.nashorn.internal.objects.NativeArray;
+import valueObjects.VoCheckbox;
 
 import valueObjects.VoTicketAgencia;
 import valueObjects.voUsuario;
@@ -200,16 +203,32 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
     }
 
     @Override
-    public void agregarTerminalUsuarioBD(String usuario, String terminal) throws ExPersistencia {
+    public void agregarTerminalUsuarioBD(String usuario, String[] terminal) throws ExPersistencia {
         try {
+            conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+            conn.setAutoCommit(false);
+            String sql1="delete from usuario_terminal where usuario=?";
             String sql2="insert into usuario_terminal (usuario, terminal) values (?,?)";
-            PreparedStatement ps2 = conn.prepareStatement(sql2);
-            ps2.setString(1, usuario);
-            ps2.setString(2, terminal);
-            ps2.executeUpdate();
-            ps2.close();
+            PreparedStatement ps1 = conn.prepareStatement(sql1);
+            ps1.setString(1, usuario);
+            ps1.executeUpdate();
+            ps1.close();
+            
+            for(int i=0;i<terminal.length;i++){
+                PreparedStatement ps2= conn.prepareStatement(sql2);
+                ps2.setString(1, usuario);
+                ps2.setString(2, terminal[i]);
+                ps2.executeUpdate();
+                ps2.close();
+            }
+            conn.commit();
               
         } catch (SQLException ex) {
+            try {
+                conn.rollback();
+            } catch (SQLException ex1) {
+                 throw new ExPersistencia("Error! en el rollback.");
+            }
             if(ex.getErrorCode() == 1062){
                 throw new ExPersistencia("Error! La terminal ya existe para ese usuario.");
             }else{
@@ -218,7 +237,6 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
                 }else{
                     throw new ExPersistencia("No se pudo asignarle la terminal al usuario. Error: "+ex.getMessage());
                 }
-                
             }
         }
     }
@@ -261,15 +279,16 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
     }
 
     @Override
-    public ArrayList obtenerTerminalesBD() throws ExPersistencia {
-        ArrayList listado = new ArrayList();
+    public List<VoCheckbox> obtenerTerminalesBD() throws ExPersistencia {
+        List<VoCheckbox> listado = new ArrayList<VoCheckbox>();
         try {
            
             String query="select terminal from terminales";
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                listado.add(rs.getString("terminal"));
+                VoCheckbox vo = new VoCheckbox(rs.getString("terminal"), "");
+                listado.add(vo);
             }
             rs.close();
             ps.close();
@@ -291,5 +310,48 @@ public class InterfaceBD_Ag_Impl implements InterfaceBD_Ag{
             throw new ExPersistencia("Error al eliminar la terminal. Error: "+ex.getMessage());
         }
         
+    }
+
+    @Override
+    public ArrayList obtenerUsuariosBD() throws ExPersistencia {
+        ArrayList listado = new ArrayList();
+        try {
+            String query="select usuario from usuarios";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                listado.add(rs.getString("usuario"));
+            }
+            rs.close();
+            ps.close();
+           
+        } catch (SQLException ex) {
+            throw new ExPersistencia("Error al obtener listado de usuarios. Error: "+ex.getMessage());
+        }
+         return listado;
+    }
+
+    @Override
+    public List<VoCheckbox> obtenerTerminalesCheckboxBD(Object get) throws ExPersistencia {
+        List<VoCheckbox> listado = new ArrayList<VoCheckbox>();
+        try {
+            String query="select t.terminal, if(tmp.terminal, 'checked','') as isChecked\n" +
+                         "from terminales t\n" +
+                         "left join \n" +
+                         "(select ut.terminal from usuario_terminal ut where ut.usuario=?) as tmp on tmp.terminal=t.terminal";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, get.toString());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                VoCheckbox vo = new VoCheckbox(rs.getString("terminal"), rs.getString("isChecked"));
+                listado.add(vo);
+            }
+            rs.close();
+            ps.close();
+           
+        } catch (SQLException ex) {
+            throw new ExPersistencia("Error al obtener listado de checkbox. Error: "+ex.getMessage());
+        }
+         return listado;
     }
 }

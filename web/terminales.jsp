@@ -37,9 +37,9 @@
                 <td>
                     <select name="terminalBaja" >
                         <c:forEach items="${listadoTerminales}" var="term">
-                            <option value="${term}" >${term}</option>
-                        </c:forEach> 
-                    </select><br>
+                            <option value="${term.terminal}" >${term.terminal}</option>
+                        </c:forEach>  
+                    </select><br>   
                 </td>
             </tr>
             <tr>

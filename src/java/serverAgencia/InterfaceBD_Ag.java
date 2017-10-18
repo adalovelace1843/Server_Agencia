@@ -7,6 +7,8 @@ package serverAgencia;
 
 import exceptions.ExPersistencia;
 import java.util.ArrayList;
+import java.util.List;
+import valueObjects.VoCheckbox;
 import valueObjects.VoTicketAgencia;
 import valueObjects.voUsuario;
 
@@ -22,10 +24,13 @@ public interface InterfaceBD_Ag {
     public boolean exsiteAnulacionBD(int nroTicket) throws ExPersistencia;
     public boolean obtenerValidacionAgenciaBD(String usuario, String clave)throws ExPersistencia;
     public void altaUsuarioBD(voUsuario vo)throws ExPersistencia;
-    public void agregarTerminalUsuarioBD(String usuario, String terminal)throws ExPersistencia;
+    public void agregarTerminalUsuarioBD(String usuario, String[] terminal)throws ExPersistencia;
     public void bajaUsuarioBD(String parameter)throws ExPersistencia;
     public void altaTerminalBD(String parameter)throws ExPersistencia;
-    public ArrayList obtenerTerminalesBD()throws ExPersistencia;
+    public List<VoCheckbox> obtenerTerminalesBD()throws ExPersistencia;
     public void bajaTerminalBD(String parameter)throws ExPersistencia;
+    public ArrayList obtenerUsuariosBD()throws ExPersistencia;
+
+    public List<VoCheckbox> obtenerTerminalesCheckboxBD(Object get)throws ExPersistencia;
 
 }

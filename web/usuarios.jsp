@@ -3,7 +3,7 @@
     Created on : 26/07/2017, 08:21:51 AM
     Author     : f188315
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -50,15 +50,33 @@
     <br>
     <h3>Agregar una terminal a usuario</h3>
     <form action="ServletIngresoUsuarios" method="POST">
-        <input type="text" name="tipo" id="tipo" value="agregarTerminal" hidden>
+        <input type="text" name="tipo" id="tipo" value="selectpicker" hidden>
         <table>
             <tr>
                 <td><label>Usuario</label></td>
-                <td><input type="text" name="usuario2" id="usuario2" required="true"></td>
+                <td>
+                    <select name="usuario2" onchange='this.form.submit()'>
+                        <option value="NS" >Ninguo seleccionado</option>
+                        <c:forEach items="${listadoUsuarios}" var="term">
+                            <option value="${term}" >${term}</option>
+                        </c:forEach> 
+                    </select><br>
+                </td>
             </tr>
             <tr>
-                <td><label>Terminal</label></td>
-                <td><input type="text" name="terminal2" id="terminal2" required="true"></td>
+         </table>
+    </form>
+    <form action="ServletIngresoUsuarios" method="POST">
+        <input type="text" name="tipo" id="tipo" value="agregarTerminal" hidden>
+        <table>
+                <input type="text" name="usuarioTerminal" id="tipo" value="${usuarioTerminal}" hidden>
+                <td><label>Terminales para usuario:</label><label > ${usuarioTerminal}</label></td>
+                <!--<td><input type="text" name="terminal2" id="terminal2" required="true"></td>-->
+                <c:forEach var="res" items="${listadoTerminales}"> 
+                    <tr>
+                        <td><input type="checkbox" name="chkBox" value="${res.terminal}" ${res.isChecked}>${res.terminal}</td>
+                   </tr>
+                 </c:forEach>
             </tr>
             
             <tr>

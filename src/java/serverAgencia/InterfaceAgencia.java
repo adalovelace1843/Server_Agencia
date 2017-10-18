@@ -8,6 +8,8 @@ package serverAgencia;
 import exceptions.ExPersistencia;
 import exceptions.ExWebServiceIMM;
 import java.util.ArrayList;
+import java.util.List;
+import valueObjects.VoCheckbox;
 import valueObjects.VoTicketAgencia;
 import valueObjects.voUsuario;
 
@@ -23,10 +25,11 @@ public interface InterfaceAgencia {
     public boolean existeAnulacion(int nroTicket) throws ExPersistencia;
     public boolean obtenerValidacionAgencia(String usuario, String clave)  throws ExPersistencia;
     public void altaUsuario(voUsuario vo)  throws ExPersistencia;
-    public void agregarTerminalUsuario(String usuario, String terminal)throws ExPersistencia;
+    public void agregarTerminalUsuario(String usuario, String[] terminal)throws ExPersistencia;
     public void bajaUsuario(String parameter)throws ExPersistencia;
     public void altaTerminal(String parameter)throws ExPersistencia;
-    public ArrayList obtenerTerminales()throws ExPersistencia;
-
+    public List<VoCheckbox> obtenerTerminales()throws ExPersistencia;
     public void bajaTerminal(String parameter)throws ExPersistencia;
+    public ArrayList obtenerUsuarios()throws ExPersistencia;
+    public List<VoCheckbox> obtenerTerminalesCheckbox(Object get)throws ExPersistencia;
 }

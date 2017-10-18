@@ -8,6 +8,7 @@ package servlets;
 
 import exceptions.ExPersistencia;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import serverAgencia.InterfaceAgencia;
 import serverAgencia.InterfaceAgenciaImpl;
+import valueObjects.VoCheckbox;
 import valueObjects.voUsuario;
 
 /**
@@ -70,22 +72,45 @@ public class ServletIngresoUsuarios extends HttpServlet {
                 }
                 break;
             case "agregarTerminal":
-        {
-            try {
-                ia.agregarTerminalUsuario(request.getParameter("usuario2"),request.getParameter("terminal2"));
-                rd=request.getRequestDispatcher("/mensaje.jsp");
-                String mensaje="Terminal ingresada correctamente!";
-                request.setAttribute("mensaje", mensaje);
-                rd.forward(request,response);
-            } catch (ExPersistencia ex) {
-                rd=request.getRequestDispatcher("/mensaje.jsp");
-                request.setAttribute("mensaje", ex.getMessage());
-                rd.forward(request,response);
-            }
-        }
+                
+                try {
+                    String[] checkedIds = request.getParameterValues("chkBox");
+                    ia.agregarTerminalUsuario(request.getParameter("usuarioTerminal"),checkedIds);
+                    rd=request.getRequestDispatcher("/mensaje.jsp");
+                    String mensaje="Terminal ingresada correctamente!";
+                    request.setAttribute("mensaje", mensaje);
+                    rd.forward(request,response);
+                } catch (ExPersistencia ex) {
+                    rd=request.getRequestDispatcher("/mensaje.jsp");
+                    request.setAttribute("mensaje", ex.getMessage());
+                    rd.forward(request,response);
+                }
+
+
+
+                break;
+            case "selectpicker":
+        
+                List<VoCheckbox> listaTerminales;
+                try {
+                    ArrayList listaUsuarios=ia.obtenerUsuarios();
+                    request.setAttribute("listadoUsuarios",listaUsuarios);
+                    
+                    listaTerminales = ia.obtenerTerminalesCheckbox(request.getParameter("usuario2"));
+                    request.setAttribute("listadoTerminales", listaTerminales);
+                    
+                   request.setAttribute("usuarioTerminal", request.getParameter("usuario2"));
+                    
+                    rd=request.getRequestDispatcher("/usuarios.jsp");
+                    rd.forward(request,response);
+                } catch (ExPersistencia ex) {
+                    rd=request.getRequestDispatcher("/mensaje.jsp");
+                    request.setAttribute("mensaje", ex.getMessage());
+                    rd.forward(request,response);
+                }  
                 break;
             case "bajaUsuario":
-        {
+        
             try {
                 ia.bajaUsuario(request.getParameter("usuario3"));
                 rd=request.getRequestDispatcher("/mensaje.jsp");
@@ -97,7 +122,7 @@ public class ServletIngresoUsuarios extends HttpServlet {
                 request.setAttribute("mensaje", ex.getMessage());
                 rd.forward(request,response);
             }
-        }
+        
                 break;
         }
         

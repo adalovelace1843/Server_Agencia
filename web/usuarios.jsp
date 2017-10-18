@@ -93,7 +93,12 @@
         <table>
             <tr>
                 <td><label>Usuario</label></td>
-                <td><input type="text" name="usuario3" id="usuario3" required="true"></td>
+                <select name="usuario3">
+                        <option value="NS" >Ninguo seleccionado</option>
+                        <c:forEach items="${listadoUsuarios}" var="term">
+                            <option value="${term}" >${term}</option>
+                        </c:forEach> 
+                </select><br>
             </tr>
             
             <tr>

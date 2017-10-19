@@ -7,106 +7,124 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<h1>Gestión de usuarios</h1>
+<h1 style="font-family: verdana; color:  #035578;">Gestión de usuarios</h1>
+<head>
+    <link href="css/bootstrap.min.css" rel="stylesheet"></link> 
+</head>
 
-<script type="text/javascript">
-	function validar(){
-		if(confirm('Confirmar los datos?')){
-                    return alert("OK");
-		}else{
-                    return alert("CANCELADO");
-		}
-	}
-</script>
+<body>
+     <div class="row">
+        <div class="col-md-12">
+            <h3 style="font-family: verdana; color:  #035578; font-size: large;padding-left: 10px;">Alta de usuarios</h3>
 
-
-<body>	
-    <h3>Alta de usuarios</h3>
-    <form action="ServletIngresoUsuarios" method="POST">
-        <input type="text" name="tipo" id="tipo" value="ingresoUsuario" hidden>
-        <table>
-            <tr>
-                <td><label>Usuario</label></td>
-                <td><input type="text" name="usuario" id="usuario" required="true"  ></td>
-            </tr>
-            <tr>
-                <td><label>Clave</label></td>
-                <td><input type="text" name="clave" id="clave" required="true"></td>
-            </tr>
-            <tr>
-                <td><label>Web</label></td>
-                <td>
-                    <select name="web" >
-                        <option value="1" >SI</option>
-                        <option value="0">NO</option>
-                    </select><br>
-                </td>
-            </tr>
-            <tr>
-                <td><button type="submit" >Ingresar</button></td>
-            </tr>
-        </table>
-    </form>
-    <br>
-    <h3>Agregar una terminal a usuario</h3>
-    <form action="ServletIngresoUsuarios" method="POST">
-        <input type="text" name="tipo" id="tipo" value="selectpicker" hidden>
-        <table>
-            <tr>
-                <td><label>Usuario</label></td>
-                <td>
-                    <select name="usuario2" onchange='this.form.submit()'>
-                        <option value="NS" >Ninguo seleccionado</option>
-                        <c:forEach items="${listadoUsuarios}" var="term">
-                            <option value="${term}" >${term}</option>
-                        </c:forEach> 
-                    </select><br>
-                </td>
-            </tr>
-            <tr>
-         </table>
-    </form>
-    <form action="ServletIngresoUsuarios" method="POST">
-        <input type="text" name="tipo" id="tipo" value="agregarTerminal" hidden>
-        <table>
-                <input type="text" name="usuarioTerminal" id="tipo" value="${usuarioTerminal}" hidden>
-                <td><label>Terminales para usuario:</label><label > ${usuarioTerminal}</label></td>
-                <!--<td><input type="text" name="terminal2" id="terminal2" required="true"></td>-->
-                <c:forEach var="res" items="${listadoTerminales}"> 
+            <form action="ServletIngresoUsuarios" method="POST">
+                <input type="text" name="tipo" id="tipo" value="ingresoUsuario" hidden>
+                <table>
                     <tr>
-                        <td><input type="checkbox" name="chkBox" value="${res.terminal}" ${res.isChecked}>${res.terminal}</td>
-                   </tr>
-                 </c:forEach>
-            </tr>
-            
-            <tr>
-                <td><button type="submit">Agregar</button></td>
-            </tr>
-        </table>
-    </form>
-    
-    
+                        <td><label style="padding-left: 30px;color: #035578;font-size: large;font-family: monospace;" >Usuario</label></td>
+                        <td><input type="text" name="usuario" id="usuario" required="true"  ></td>
+                    </tr>
+                    <tr>
+                        <td><label style="padding-left: 30px;color: #035578;font-size: large;font-family: monospace;">Clave</label></td>
+                        <td><input type="text" name="clave" id="clave" required="true"></td>
+                    </tr>
+                    <tr>
+                        <td><label style="padding-left: 30px;color: #035578;font-size: large;font-family: monospace;">Web</label></td>
+                        <td>
+                            <select name="web" >
+                                <option value="1" >SI</option>
+                                <option value="0">NO</option>
+                            </select><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 30px;"><button class="btn btn-md btn-primary btn-block" type="submit" >Ingresar</button></td>
+                    </tr>
+                </table>
+                <br/>
+                <br/>
+            </form>
+        </div>
+    </div>
     <br>
-    <h3>Baja de usuarios</h3>
-    <form action="ServletIngresoUsuarios" method="POST">
-        <input type="text" name="tipo" id="tipo" value="bajaUsuario" hidden>
-        <table>
-            <tr>
-                <td><label>Usuario</label></td>
-                <select name="usuario3">
-                        <option value="NS" >Ninguo seleccionado</option>
-                        <c:forEach items="${listadoUsuarios}" var="term">
-                            <option value="${term}" >${term}</option>
-                        </c:forEach> 
-                </select><br>
-            </tr>
-            
-            <tr>
-                <td><button type="submit" id="btnBaja">Baja</button></td>
-            </tr>
-        </table>
-    </form>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <h3 style="font-family: verdana; color:  #035578; font-size: large;padding-left: 10px;">Agregar una terminal a usuario</h3>
+
+            <form action="ServletIngresoUsuarios" method="POST">
+                <input type="text" name="tipo" id="tipo" value="selectpicker" hidden>
+                <table>
+                    <tr>
+                        <td><label style="padding-left: 30px;color: #035578;font-size: large;font-family: monospace;">Usuario</label></td>
+                        <td>
+                            <select name="usuario2" onchange='this.form.submit()'>
+                                <option value="NS" >Ninguo seleccionado</option>
+                                <c:forEach items="${listadoUsuarios}" var="term">
+                                    <option value="${term}" >${term}</option>
+                                </c:forEach> 
+                            </select><br>
+                        </td>
+                    </tr>
+                    <tr>
+                 </table>
+            </form>
+            <form action="ServletIngresoUsuarios" method="POST">
+                <input type="text" name="tipo" id="tipo" value="agregarTerminal" hidden>
+                <table>
+                    <tr>
+                        <input type="text" name="usuarioTerminal" id="tipo" value="${usuarioTerminal}" hidden>
+                        <td>
+                            <label style="padding-left: 30px;color: #035578;font-size: large;font-family: monospace;">Terminales para usuario:</label>
+                            <label style="padding-left: 30px;color: #035578;font-size: large;font-family: monospace;"> ${usuarioTerminal}</label>
+                        </td>
+                    </tr>
+                    <c:forEach var="res" items="${listadoTerminales}"> 
+                    <tr>
+                        <td style="padding-left: 30px;"><input type="checkbox" name="chkBox" value="${res.terminal}" ${res.isChecked}>${res.terminal}</td>
+                    </tr>
+                     </c:forEach>
+
+                    <tr>
+                        <td style="padding-left: 30px;"><button class="btn btn-md btn-primary btn-block" type="submit">Agregar</button></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <br>
+     <br>
+    <div class="row">
+        <div class="col-md-12">
+            <h3 style="font-family: verdana; color:  #035578; font-size: large;padding-left: 10px;">Baja de usuarios</h3>
+
+            <form action="ServletIngresoUsuarios" method="POST">
+                <input type="text" name="tipo" id="tipo" value="bajaUsuario" hidden>
+                <table>
+                    <tr>
+                        <td><label style="padding-left: 30px;color: #035578;font-size: large;font-family: monospace;" >Usuario</label></td>
+                        <td>
+                            <select name="usuario3">
+                                <option value="NS" >Ninguo seleccionado</option>
+                                <c:forEach items="${listadoUsuarios}" var="term">
+                                    <option value="${term}" >${term}</option>
+                                </c:forEach> 
+                            </select><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 30px;"><button class="btn btn-md btn-primary btn-block" type="submit" id="btnBaja">Baja</button></td>
+                    </tr>
+                </table>
+                <br/>
+                <br/>
+            </form>
+        </div>
+    </div>
+   
     <br>
 </body>
- <a href="menu.jsp">Volver</a>
+
+ <a href="menu.jsp" style="padding-left: 20px;">Volver</a>
 </html>
